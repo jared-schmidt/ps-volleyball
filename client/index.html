@@ -1,0 +1,43 @@
+<head>
+    <title>ps-volleyball</title>
+</head>
+
+<body>
+    <h1>ps-volleyball</h1> {{> hello}}
+</body>
+
+<template name="hello">
+    <button>Create Teams</button>
+
+    <br />
+    <br />
+    <br />
+
+    Team 1:
+    <ul style='list-style-type: decimal'>
+        {{#each team1}}
+            <li>
+                {{this}}
+            </li>
+        {{/each}}
+    </ul>
+
+    Team 2:
+    <ul style='list-style-type: decimal'>
+        {{#each team2}}
+            <li>
+                {{this}}
+            </li>
+        {{/each}}
+    </ul>
+
+    All players
+    <ul style='list-style-type: decimal'>
+        {{#each players}}
+            <li>
+                {{this}}
+            </li>
+        {{/each}}
+    </ul>
+
+</template>
