@@ -31,7 +31,7 @@ Template.hello.helpers({
     },
     isJared: function(){
         console.log(Meteor.user());
-        return Meteor.user().profile.name === 'Jared Schmidt';
+        return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Jonathan Savage';
     }
 });
 
