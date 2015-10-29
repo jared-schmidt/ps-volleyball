@@ -24,14 +24,11 @@
     <a href='https://docs.google.com/document/d/1D_S-2xNvmcWxbq5dUv8JpWEPPLynKI3GTYT8Ije5mS0/edit'>Rules</a>
 </template>
 
-<template name="userPill">
-    {{#each usersOnline}}
-        <span class="label {{labelClass}}">{{username}}</span>
-    {{/each}}
-</template>
 
 <template name="hello">
-    <button>Create Teams</button>
+    {{#if isJared}}
+        <button>Create Teams</button>
+    {{/if}}
 
     <td>
         Team 1 (Home (Road Side)):

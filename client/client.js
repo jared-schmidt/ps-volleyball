@@ -28,6 +28,10 @@ Template.hello.helpers({
         } else {
             return [];
         }
+    },
+    isJared: function(){
+        console.log(Meteor.user());
+        return Meteor.user().profile.name === 'Jared Schmidt';
     }
 });
 
