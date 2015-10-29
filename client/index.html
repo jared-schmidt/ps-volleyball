@@ -3,45 +3,66 @@
 </head>
 
 <body>
-    <h1>ps-volleyball</h1>
+    <h1>ps-volleyball || {{> loginButtons}}</h1>
 
-    {{> hello}}
+    {{#if currentUser}}
+        <table class="table">
+            <tr>
+                {{> hello}}
+            </tr>
 
-    <a href='https://github.com/jared-schmidt/ps-volleyball'>GitHub</a>
+        </table>
+
+        {{> rules}} | <a href='https://github.com/jared-schmidt/ps-volleyball'>GitHub</a>
+    {{/if}}
+
+
 </body>
+
+
+<template name='rules'>
+    <a href='https://docs.google.com/document/d/1D_S-2xNvmcWxbq5dUv8JpWEPPLynKI3GTYT8Ije5mS0/edit'>Rules</a>
+</template>
+
+<template name="userPill">
+    {{#each usersOnline}}
+        <span class="label {{labelClass}}">{{username}}</span>
+    {{/each}}
+</template>
 
 <template name="hello">
     <button>Create Teams</button>
 
-    <br />
-    <br />
-    <br />
+    <td>
+        Team 1 (Home (Road Side)):
+        <ul style='list-style-type: decimal'>
+            {{#each team1}}
+                <li>
+                    {{this.profile.name}}
+                </li>
+            {{/each}}
+        </ul>
+    </td>
 
-    Team 1:
-    <ul style='list-style-type: decimal'>
-        {{#each team1}}
-            <li>
-                {{this}}
-            </li>
-        {{/each}}
-    </ul>
+    <td>
+        Team 2 (Away):
+        <ul style='list-style-type: decimal'>
+            {{#each team2}}
+                <li>
+                    {{this.profile.name}}
+                </li>
+            {{/each}}
+        </ul>
+    </td>
 
-    Team 2:
-    <ul style='list-style-type: decimal'>
-        {{#each team2}}
-            <li>
-                {{this}}
-            </li>
-        {{/each}}
-    </ul>
-
-    All players
-    <ul style='list-style-type: decimal'>
-        {{#each players}}
-            <li>
-                {{this}}
-            </li>
-        {{/each}}
-    </ul>
-
+    <td>
+        All players
+        <ul style='list-style-type: decimal'>
+            {{#each players}}
+                <li>
+                    {{this.profile.name}}
+                </li>
+            {{/each}}
+        </ul>
+    </td>
 </template>
