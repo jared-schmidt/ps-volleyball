@@ -1,3 +1,7 @@
+Meteor.startup(function() {
+    Meteor.subscribe('userData');
+});
+
 Session.setDefault('team1', []);
 Session.setDefault('team2', []);
 
@@ -11,7 +15,7 @@ function isOdd(num) { return num % 2;}
 
 Template.hello.helpers({
     players: function() {
-        return Meteor.users.find({}).fetch();
+        return Meteor.users.find({}, {sort: {'profile.wins': -1}}).fetch();
     },
     team1: function() {
     var team = Team1.find({}).fetch();
@@ -38,7 +42,7 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-    'click button': function() {
+    'click #createTeams': function() {
         var mixed = shuffle(Meteor.users.find({}).fetch());
 
         var oddPerson = null;
@@ -66,7 +70,13 @@ Template.hello.events({
 
         Meteor.call('team1', team1);
         Meteor.call('team2', team2);
+    },
+    'click #team1Win': function(){
+        Meteor.call('markTeam1Win');
+    },
+    'click #team2Win': function(){
+        Meteor.call('markTeam2Win');
+    },
 
-    }
 });
 
