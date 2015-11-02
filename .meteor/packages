@@ -25,3 +25,5 @@ accounts-google
 accounts-ui
 fortawesome:fontawesome
 #iron:router
+#houston:admin
+service-configuration
