@@ -26,6 +26,18 @@
 
 
 <template name="hello">
+  <br />
+  <br />
+  <label>YOUR STATUS:</label>
+  <select id='activeSelect'>
+    <option value="1">Active</option>
+    <option value="0">not active</option>
+  </select>
+
+  <br />
+  <br />
+  <br />
+
     {{#if isAdmin}}
         <button id='createTeams'>Create Teams</button>
     {{/if}}
@@ -60,10 +72,11 @@
 
     <td>
         Roster (All players)
+        Player - wins -- active
         <ul style='list-style-type: decimal'>
             {{#each players}}
                 <li>
-                    {{this.profile.name}} - {{this.profile.wins}}
+                    {{this.profile.name}} - {{this.profile.wins}} -- {{profile.active}}
                 </li>
             {{/each}}
         </ul>

@@ -42,8 +42,12 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
+    'change #activeSelect': function(e){
+      var newValue = e.target.value;
+      Meteor.call('changeStatus', newValue);
+    },
     'click #createTeams': function() {
-        var mixed = shuffle(Meteor.users.find({}).fetch());
+        var mixed = shuffle(Meteor.users.find({'profile.active': '1'}).fetch());
 
         var oddPerson = null;
 
@@ -79,4 +83,3 @@ Template.hello.events({
     },
 
 });
-

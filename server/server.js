@@ -3,7 +3,6 @@ Meteor.startup(function() {
 });
 
 Meteor.publish('userData', function() {
-console.log(this.userId);
   if(!this.userId) return null;
   return Meteor.users.find(this.userId, {fields: {
     wins: 1,
@@ -11,6 +10,9 @@ console.log(this.userId);
 });
 
 Meteor.methods({
+    changeStatus: function(newStatus){
+      Meteor.users.update({'_id': this.userId}, {$set:{'profile.active': newStatus}});
+    },
     team1: function(team){
         Team1.remove({});
         Team1.insert({
