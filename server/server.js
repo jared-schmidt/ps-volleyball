@@ -59,5 +59,52 @@ Meteor.methods({
 
         Team1.remove({});
         Team2.remove({});
+    },
+    fixTotalGamesPlayer: function(){
+
+        var pastGames = PastTeams.find({}).fetch();
+
+        var playerCount = [];
+
+        _.each(pastGames, function(game){
+            var win = game.winningTeam.team;
+            var lose = game.losingTeam.team;
+
+            _.each(win, function(player){
+                var found = _.findWhere(playerCount, {_id: player._id});
+                if (found){
+                    found.total += 1;
+                    found.win += 1;
+                } else {
+                    playerCount.push({
+                        _id: player._id,
+                        name: player.profile.name,
+                        win: 1,
+                        lost: 0,
+                        total: 1
+                    });
+                }
+            });
+
+            _.each(lose, function(player){
+                var found = _.findWhere(playerCount, {_id: player._id});
+                if (found){
+                    found.total += 1;
+                    found.lost += 1;
+                } else {
+                    playerCount.push({
+                        _id: player._id,
+                        name: player.profile.name,
+                        lost: 1,
+                        win: 0,
+                        total: 1
+                    });
+                }
+            });
+
+        });
+        console.log(playerCount);
+        
+        return playerCount;
     }
 });

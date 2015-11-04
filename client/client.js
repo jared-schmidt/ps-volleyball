@@ -81,5 +81,15 @@ Template.hello.events({
     'click #team2Win': function(){
         Meteor.call('markTeam2Win');
     },
+    'click #fix': function(){
+        Meteor.call('fixTotalGamesPlayer', function(err, data){
+            console.log(data);
+            console.log('NAME --- WIN --- LOST --- TOTAL');
+            _.each(data, function(d){
+                console.log(d.name + ' --- ' + d.win + ' --- ' + d.lost + ' --- ' + d.total);
+            });
+            alert('check javascript console');
+        });
+    }
 
 });
