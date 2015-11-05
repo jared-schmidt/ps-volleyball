@@ -38,42 +38,54 @@ Template.hello.helpers({
             return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage';
         }
         return '';
+    },
+    isActive: function(){
+        return Meteor.user().profile.active;
+    },
+    stats: function(){
+        return Session.get('stats')
     }
 });
 
 Template.hello.events({
     'change #activeSelect': function(e){
-      var newValue = e.target.value;
+      var newValue = $(e.target).is(":checked");
       Meteor.call('changeStatus', newValue);
     },
     'click #createTeams': function() {
-        var mixed = shuffle(Meteor.users.find({'profile.active': '1'}).fetch());
+        if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage'){
+            if (confirm("Create New Teams?")){
+                var mixed = shuffle(Meteor.users.find({'profile.active': true}).fetch());
 
-        var oddPerson = null;
+                var oddPerson = null;
 
-        if (isOdd(mixed.length)){
-            oddPerson = mixed.pop();
-        }
+                if (isOdd(mixed.length)){
+                    oddPerson = mixed.pop();
+                }
 
-        var halfLength = mixed.length/2;
-        var totalLength = mixed.length;
+                var halfLength = mixed.length/2;
+                var totalLength = mixed.length;
 
-        var team1 = mixed.slice(0, halfLength);
-        var team2 = mixed.slice(halfLength, totalLength);
+                var team1 = mixed.slice(0, halfLength);
+                var team2 = mixed.slice(halfLength, totalLength);
 
-        if (oddPerson){
-            if ((Math.floor(Math.random() * 2) === 0)){
-                team1.push(oddPerson);
-            } else {
-                team2.push(oddPerson);
+                if (oddPerson){
+                    if ((Math.floor(Math.random() * 2) === 0)){
+                        team1.push(oddPerson);
+                    } else {
+                        team2.push(oddPerson);
+                    }
+                }
+
+                // Session.set('team1', team1);
+                // Session.set('team2', team2);
+
+                Meteor.call('team1', team1);
+                Meteor.call('team2', team2);
             }
+        } else {
+            alert("Need to be an admin");
         }
-
-        // Session.set('team1', team1);
-        // Session.set('team2', team2);
-
-        Meteor.call('team1', team1);
-        Meteor.call('team2', team2);
     },
     'click #team1Win': function(){
         Meteor.call('markTeam1Win');
@@ -81,14 +93,17 @@ Template.hello.events({
     'click #team2Win': function(){
         Meteor.call('markTeam2Win');
     },
-    'click #fix': function(){
+    'click #fix': function(e){
+        e.preventDefault();
         Meteor.call('fixTotalGamesPlayer', function(err, data){
             console.log(data);
-            console.log('NAME --- WIN --- LOST --- TOTAL');
-            _.each(data, function(d){
-                console.log(d.name + ' --- ' + d.win + ' --- ' + d.lost + ' --- ' + d.total);
-            });
-            alert('check javascript console');
+            Session.set('stats', data);
+            $('#stats').show();
+            // console.log('NAME --- WIN --- LOST --- TOTAL');
+            // _.each(data, function(d){
+            //     console.log(d.name + ' --- ' + d.win + ' --- ' + d.lost + ' --- ' + d.total);
+            // });
+            // alert('check javascript console');
         });
     }
 
