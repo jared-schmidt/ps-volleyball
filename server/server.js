@@ -83,23 +83,23 @@ Meteor.methods({
             var win = game.winningTeam.team;
             var lose = game.losingTeam.team;
 
-
             _.each(win, function(player){
                 var found = _.findWhere(playerCount, {_id: player._id});
-                // console.log("Found win");
                 if (found){
-                    // console.log("Found player - win");
                     found.total += 1;
                     found.win += 1;
-                    found.streak += 1;
+                    found.winningStreak += 1;
+                    found.losingStreak = 0;
+                    // found.playingStreak += 1;
                 } else {
-                    // console.log("did not find player - win");
                     playerCount.push({
                         _id: player._id,
                         name: player.profile.name,
                         win: 1,
                         lost: 0,
-                        streak: 1,
+                        winningStreak: 1,
+                        losingStreak: 0,
+                        // playingStreak: 0,
                         total: 1
                     });
                 }
@@ -107,29 +107,28 @@ Meteor.methods({
 
             _.each(lose, function(player){
                 var found = _.findWhere(playerCount, {_id: player._id});
-                // console.log("Found lost");
                 if (found){
-                    // console.log("Found player - lose");
-
                     found.total += 1;
                     found.lost += 1;
-                    found.streak = 0;
+                    found.winningStreak = 0;
+                    found.losingStreak += 1;
+                    // found.playingStreak += 1;
                 } else {
-                    // console.log("did not find player - lose");
-
                     playerCount.push({
                         _id: player._id,
                         name: player.profile.name,
                         lost: 1,
                         win: 0,
-                        streak: 0,
+                        winningStreak: 0,
+                        losingStreak: 1,
+                        // playingStreak: 0,
                         total: 1
                     });
                 }
             });
 
         });
-        console.log(playerCount);
+        // console.log(playerCount);
 
         return playerCount;
     }
