@@ -117,14 +117,14 @@
                       <table>
                           <thead>
                               <th>Name</th>
-                              <!-- <th>Wins</th> -->
+                              <th>Title</th>
                               <th>Active</th>
                           </thead>
                          <tbody>
                              {{#each players}}
                                 <tr>
-                                    <td>{{this.profile.name}}</td>
-                                    <!-- <td>{{this.profile.wins}}</td> -->
+                                    <td>{{profile.name}}</td>
+                                    <td>{{profile.title}}</td>
                                     <td>{{profile.active}}</td>
                                 </tr>
                             {{/each}}
@@ -165,9 +165,7 @@
                          </tbody>
                        </table>
                    </div>
-                       <div class="card-action">
-                           <a id='fix' href="#">Display more Stats</a>
-                       </div>
+
                </div>
            </div>
         </div>
