@@ -39,41 +39,44 @@ Meteor.methods({
     markTeam1Win: function(){
         if (isAdmin()){
             var team = Team1.findOne({});
+                if (team){
+                _.each(team.team, function(player){
+                    Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
+                });
 
-            _.each(team.team, function(player){
-                Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
-            });
+                PastTeams.insert({
+                    winningTeam: Team1.findOne({}),
+                    losingTeam: Team2.findOne({}),
+                    when: new Date()
+                });
 
-            PastTeams.insert({
-                winningTeam: Team1.findOne({}),
-                losingTeam: Team2.findOne({}),
-                when: new Date()
-            });
-
-            Team1.remove({});
-            Team2.remove({});
+                Team1.remove({});
+                Team2.remove({});
+            }
         }
 
     },
     markTeam2Win: function(){
         if (isAdmin()){
             var team = Team2.findOne({});
+            if (team){
+                _.each(team.team, function(player){
+                    Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
+                });
 
-            _.each(team.team, function(player){
-                Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
-            });
+                PastTeams.insert({
+                    winningTeam: Team2.findOne({}),
+                    losingTeam: Team1.findOne({}),
+                    when: new Date()
+                });
 
-            PastTeams.insert({
-                winningTeam: Team2.findOne({}),
-                losingTeam: Team1.findOne({}),
-                when: new Date()
-            });
-
-            Team1.remove({});
-            Team2.remove({});
+                Team1.remove({});
+                Team2.remove({});
+            }
         }
     },
     fixTotalGamesPlayer: function(){
+        var allPlayers = Meteor.users.find().fetch();
 
         var pastGames = PastTeams.find({}, {sort: {'created': -1}}).fetch();
 
@@ -99,7 +102,7 @@ Meteor.methods({
                         lost: 0,
                         winningStreak: 1,
                         losingStreak: 0,
-                        // playingStreak: 0,
+                        playingStreak: 0,
                         total: 1
                     });
                 }
@@ -121,9 +124,28 @@ Meteor.methods({
                         win: 0,
                         winningStreak: 0,
                         losingStreak: 1,
-                        // playingStreak: 0,
+                        playingStreak: 0,
                         total: 1
                     });
+                }
+            });
+
+            _.each(allPlayers, function(player){
+                var playerOnTeam = _.findWhere(win, {'_id': player._id});
+                if (!playerOnTeam){
+                    playerOnTeam = _.findWhere(lose, {'_id': player._id});
+                }
+
+                var found = _.findWhere(playerCount, {_id: player._id});
+                if (playerOnTeam){
+                    if (found){
+                        found.playingStreak += 1;
+                    }
+                } else {
+
+                    if (found){
+                        found.playingStreak = 0;
+                    }
                 }
             });
 
