@@ -17,12 +17,9 @@
 
 
     {{#if currentUser}}
-        <table class="table">
-            <tr>
-                {{> hello}}
-            </tr>
-
-        </table>
+        {{> hello}}
+    {{else}}
+        Doing something....or maybe doing nothing....
     {{/if}}
 
 
@@ -133,6 +130,8 @@
                   </div>
                       <div class="card-action">
                           <a id='fix' href="#">Display more Stats</a>
+                          <a id='pastTeamsBtn' href="#">Past Teams</a>
+                          <!-- <a id='highest' href="#">Records</a> -->
                       </div>
               </div>
           </div>
@@ -173,5 +172,96 @@
                </div>
            </div>
         </div>
+
+        <div class="row" id='pastTeams' style="display: none;">
+            <div class="col s12 m12">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Past Teams</span>
+                        <table>
+                            <thead>
+                                <th>Date</th>
+                                <th>Winning Team</th>
+                                <th>Losing Team</th>
+                            </thead>
+                           <tbody>
+                               {{#each pastTeams}}
+                                  <tr style="border: 1px black solid">
+                                      <td>
+                                          {{dateFormat}}
+                                      </td>
+                                      <td>
+                                          <ul>
+                                              {{#each winningTeam.team}}
+                                                <li>{{profile.name}}</li>
+                                              {{/each}}
+                                          </ul>
+                                      </td>
+                                      <td>
+                                            <ul>
+                                                {{#each losingTeam.team}}
+                                                    <li>{{profile.name}}</li>
+                                                {{/each}}
+                                            </ul>
+                                      </td>
+                                  </tr>
+                              {{/each}}
+                          </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+
+
+         <div class="row" id='recordsCard' style="display: none;">
+             <div class="col s12 m12">
+                 <div class="card blue-grey darken-1">
+                     <div class="card-content white-text">
+                         <span class="card-title">Records</span>
+                         <table>
+                             <thead>
+                                 <th>Date</th>
+                                 <th>Winning Team</th>
+                                 <th>Losing Team</th>
+                             </thead>
+                            <tbody>
+                               <tr style="border: 1px black solid">
+                                    <td>Highest Playing</td>
+                                   <td>
+                                      {{records.playing.name}}
+                                   </td>
+                                   <td>
+                                       {{records.playing.score}}
+                                   </td>
+                               </tr>
+                               <tr style="border: 1px black solid">
+                                   <td>Highest Losing</td>
+
+                                   <td>
+                                      {{records.losing.name}}
+                                   </td>
+                                   <td>
+                                       {{records.losing.score}}
+                                   </td>
+                               </tr>
+                               <tr style="border: 1px black solid">
+                                   <td>Highest Winning</td>
+
+                                   <td>
+                                      {{records.winning.name}}
+                                   </td>
+                                   <td>
+                                       {{records.winning.score}}
+                                   </td>
+                               </tr>
+                           </tbody>
+                         </table>
+                     </div>
+
+                 </div>
+             </div>
+          </div>
 
 </template>

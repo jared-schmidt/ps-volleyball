@@ -75,6 +75,13 @@ Meteor.methods({
             }
         }
     },
+    pastTeams: function(){
+        var pastGames = PastTeams.find({}, {sort: {'created': -1}}).fetch();
+        return pastGames;
+    },
+    getHighestRecords: function(){
+        return Records.findOne({}, {sort: {'when': -1}});
+    },
     fixTotalGamesPlayer: function(){
         var allPlayers = Meteor.users.find().fetch();
 
@@ -151,6 +158,44 @@ Meteor.methods({
 
         });
         // console.log(playerCount);
+
+        var highestPlayingStreak = _.max(playerCount, function(player){ return player.playingStreak; });
+        var highestLosingStreak = _.max(playerCount, function(player){ return player.losingStreak; });
+        var highestWinningStreak = _.max(playerCount, function(player){ return player.winningStreak; });
+
+        var currectPlaying = PlayingStreak.findOne({}, {$sort: {'when': -1}});
+
+        if (!currectPlaying || highestPlayingStreak.playingStreak > currectPlaying.score ){
+            PlayingStreak.insert({
+                name: highestPlayingStreak.name,
+                playerId:  highestPlayingStreak._id,
+                score: highestPlayingStreak.playingStreak,
+                when: new Date()
+            });
+        }
+
+        var currectWinning = WinningStreak.findOne({}, {$sort: {'when': -1}});
+
+        if (!currectWinning || highestWinningStreak.winningStreak > currectWinning.score ){
+            WinningStreak.insert({
+                name: highestWinningStreak.name,
+                playerId:  highestWinningStreak._id,
+                score: highestWinningStreak.winningStreak,
+                when: new Date()
+            });
+        }
+
+        var currectLosing = LosingStreak.findOne({}, {$sort: {'when': -1}});
+
+        if (!currectLosing || highestLosingStreak.losingStreak > currectLosing.score ){
+            LosingStreak.insert({
+                name: highestLosingStreak.name,
+                playerId:  highestLosingStreak._id,
+                score: highestLosingStreak.losingStreak,
+                when: new Date()
+            });
+        }
+
 
         return playerCount;
     }
