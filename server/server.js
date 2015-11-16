@@ -163,9 +163,12 @@ Meteor.methods({
         var highestLosingStreak = _.max(playerCount, function(player){ return player.losingStreak; });
         var highestWinningStreak = _.max(playerCount, function(player){ return player.winningStreak; });
 
-        var currectPlaying = PlayingStreak.findOne({}, {$sort: {'when': -1}});
+        var currectPlaying = PlayingStreak.find({}, {$sort: {'when': -1}})[0];
+        console.log(currectPlaying);
 
         if (!currectPlaying || highestPlayingStreak.playingStreak > currectPlaying.score ){
+            console.log("NEW PLAYING RECORD");
+
             PlayingStreak.insert({
                 name: highestPlayingStreak.name,
                 playerId:  highestPlayingStreak._id,
@@ -174,9 +177,11 @@ Meteor.methods({
             });
         }
 
-        var currectWinning = WinningStreak.findOne({}, {$sort: {'when': -1}});
-
+        var currectWinning = WinningStreak.find({}, {$sort: {'when': -1}})[0];
+        console.log(currectWinning);
         if (!currectWinning || highestWinningStreak.winningStreak > currectWinning.score ){
+            console.log("NEW WINNING RECORD");
+
             WinningStreak.insert({
                 name: highestWinningStreak.name,
                 playerId:  highestWinningStreak._id,
@@ -185,9 +190,10 @@ Meteor.methods({
             });
         }
 
-        var currectLosing = LosingStreak.findOne({}, {$sort: {'when': -1}});
-
+        var currectLosing = LosingStreak.find({}, {$sort: {'when': -1}})[0];
+        console.log(currectLosing);
         if (!currectLosing || highestLosingStreak.losingStreak > currectLosing.score ){
+            console.log("NEW LOSING RECORD");
             LosingStreak.insert({
                 name: highestLosingStreak.name,
                 playerId:  highestLosingStreak._id,
