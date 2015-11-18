@@ -32,3 +32,4 @@ materialize:materialize@=0.97.0
 #afruth:chapp
 #check
 mrt:momentjs
+raix:handlebar-helpers

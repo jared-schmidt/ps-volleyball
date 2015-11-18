@@ -34,6 +34,17 @@
 
 <template name="hello">
 
+    <!-- Modal Structure -->
+ <div id="modal1" class="modal">
+   <div class="modal-content">
+     <h4>Create New Teams</h4>
+     <p>This will create new team, and overwrite any currectly existing teams.</p>
+   </div>
+   <div class="modal-footer">
+     <a href="#!" id='createTeams' class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+   </div>
+ </div>
+
 <div class="row">
     <div class="col s12 m6">
       <label>YOUR STATUS:</label>
@@ -63,52 +74,60 @@
                 <a target='_blank' href='https://docs.google.com/document/d/1D_S-2xNvmcWxbq5dUv8JpWEPPLynKI3GTYT8Ije5mS0/edit' class="btn-floating green"><i class="fa fa-book"></i></a>
             </li>
             <li>
-                <a href='#' id='createTeams' class="btn-floating blue"><i class="fa fa-plus"></i></a>
+                <a href='#' id='teamsModal' class="btn-floating blue"><i class="fa fa-plus"></i></a>
             </li>
         </ul>
     </div>
 
 
     <div class="row">
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <span class="card-title">Home (Parking Lot)</span>
-                    <ul style='list-style-type: decimal'>
-                        {{#each team1}}
-                            <li>
-                                {{this.profile.name}}
-                            </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                {{#if isAdmin}}
-                    <div class="card-action">
-                        <a id='team1Win' href="#">Won</a>
+        {{#if $gt getLength team1 1}}
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Home (Parking Lot)</span>
+                        <ul style='list-style-type: decimal'>
+                            {{#each team1}}
+                                <li>
+                                    {{this.profile.name}}
+                                </li>
+                            {{/each}}
+                        </ul>
                     </div>
-                {{/if}}
+                    {{#if isAdmin}}
+                        {{#if $gt getLength team1 1}}
+                            <div class="card-action">
+                                <a id='team1Win' href="#">Won</a>
+                            </div>
+                        {{/if}}
+                    {{/if}}
+                </div>
             </div>
-        </div>
+        {{/if}}
 
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <span class="card-title">Away (Road)</span>
-                    <ul style='list-style-type: decimal'>
-                        {{#each team2}}
-                            <li>
-                                {{this.profile.name}}
-                            </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                {{#if isAdmin}}
-                    <div class="card-action">
-                        <a id='team2Win' href="#">Won</a>
+        {{#if $gt getLength team2 1}}
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Away (Road)</span>
+                        <ul style='list-style-type: decimal'>
+                            {{#each team2}}
+                                <li>
+                                    {{this.profile.name}}
+                                </li>
+                            {{/each}}
+                        </ul>
                     </div>
-                {{/if}}
+                    {{#if isAdmin}}
+                        {{#if $gt getLength team2 1}}
+                            <div class="card-action">
+                                <a id='team2Win' href="#">Won</a>
+                            </div>
+                        {{/if}}
+                    {{/if}}
+                </div>
             </div>
-        </div>
+        {{/if}}
 
      </div>
 

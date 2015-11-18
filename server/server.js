@@ -19,7 +19,7 @@ Meteor.methods({
     },
     team1: function(team){
         console.log(isAdmin());
-        if (isAdmin()){
+        if (isAdmin() && team.length > 1){
             Team1.remove({});
             Team1.insert({
                 'team': team,
@@ -28,7 +28,7 @@ Meteor.methods({
         }
     },
     team2: function(team){
-        if (isAdmin()){
+        if (isAdmin() && team.length > 1){
             Team2.remove({});
             Team2.insert({
                 'team': team,
@@ -39,7 +39,7 @@ Meteor.methods({
     markTeam1Win: function(){
         if (isAdmin()){
             var team = Team1.findOne({});
-                if (team){
+                if (team && team.team.length > 1){
                 _.each(team.team, function(player){
                     Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
                 });
@@ -59,7 +59,7 @@ Meteor.methods({
     markTeam2Win: function(){
         if (isAdmin()){
             var team = Team2.findOne({});
-            if (team){
+            if (team && team.team.length > 1){
                 _.each(team.team, function(player){
                     Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
                 });
@@ -89,7 +89,6 @@ Meteor.methods({
             winning: currectWinning,
             losing: currectLosing
         }
-
     },
     fixTotalGamesPlayer: function(){
         var allPlayers = Meteor.users.find().fetch();
@@ -166,18 +165,21 @@ Meteor.methods({
             });
 
         });
-        // console.log(playerCount);
 
         var highestPlayingStreak = _.max(playerCount, function(player){ return player.playingStreak; });
         var highestLosingStreak = _.max(playerCount, function(player){ return player.losingStreak; });
         var highestWinningStreak = _.max(playerCount, function(player){ return player.winningStreak; });
 
+        var newHigh = false;
+        var newLow = false;
+        var newPlay = false;
 
         var currectPlaying = PlayingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
         console.log(currectPlaying);
 
         if (!currectPlaying || highestPlayingStreak.playingStreak > currectPlaying.score ){
             console.log("NEW PLAYING RECORD");
+            newPlay = true;
 
             PlayingStreak.insert({
                 name: highestPlayingStreak.name,
@@ -191,7 +193,7 @@ Meteor.methods({
         console.log(currectWinning);
         if (!currectWinning || highestWinningStreak.winningStreak > currectWinning.score ){
             console.log("NEW WINNING RECORD");
-
+            newHigh = true;
             WinningStreak.insert({
                 name: highestWinningStreak.name,
                 playerId:  highestWinningStreak._id,
@@ -204,6 +206,7 @@ Meteor.methods({
         console.log(currectLosing);
         if (!currectLosing || highestLosingStreak.losingStreak > currectLosing.score ){
             console.log("NEW LOSING RECORD");
+            newLow = true;
             LosingStreak.insert({
                 name: highestLosingStreak.name,
                 playerId:  highestLosingStreak._id,
@@ -213,6 +216,11 @@ Meteor.methods({
         }
 
 
-        return playerCount;
+        return {
+            players: playerCount,
+            newHigh: newHigh,
+            newLow: newLow,
+            newPlay: newPlay
+        };
     }
 });
