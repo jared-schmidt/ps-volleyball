@@ -1,6 +1,12 @@
 <head>
     <title>ps-volleyball</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="icon" sizes="16x16 32x32" href="/logo.png">
+
     <!-- Meta tags that set up the page as a mobile page   -->
     <meta name = "viewport" content = "user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
 </head>
@@ -222,13 +228,13 @@
                          <span class="card-title">Records</span>
                          <table>
                              <thead>
-                                 <th>Date</th>
-                                 <th>Winning Team</th>
-                                 <th>Losing Team</th>
+                                 <th>&nbsp;</th>
+                                 <th>Name</th>
+                                 <th>Score</th>
                              </thead>
                             <tbody>
-                               <tr style="border: 1px black solid">
-                                    <td>Highest Playing</td>
+                               <tr>
+                                    <td>Highest Playing Streak</td>
                                    <td>
                                       {{records.playing.name}}
                                    </td>
@@ -236,8 +242,8 @@
                                        {{records.playing.score}}
                                    </td>
                                </tr>
-                               <tr style="border: 1px black solid">
-                                   <td>Highest Losing</td>
+                               <tr>
+                                   <td>Highest Losing Streak</td>
 
                                    <td>
                                       {{records.losing.name}}
@@ -246,8 +252,8 @@
                                        {{records.losing.score}}
                                    </td>
                                </tr>
-                               <tr style="border: 1px black solid">
-                                   <td>Highest Winning</td>
+                               <tr>
+                                   <td>Highest Winning Streak</td>
 
                                    <td>
                                       {{records.winning.name}}

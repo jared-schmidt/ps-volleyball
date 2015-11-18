@@ -80,9 +80,10 @@ Meteor.methods({
         return pastGames;
     },
     getHighestRecords: function(){
-        var currectPlaying = PlayingStreak.find({}, {sort: {'when': -1}}).fetch()[0];
-        var currectWinning = WinningStreak.find({}, {sort: {'when': -1}}).fetch()[0];
-        var currectLosing = LosingStreak.find({}, {sort: {'when': -1}}).fetch()[0];
+        var currectPlaying = PlayingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        var currectWinning = WinningStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        var currectLosing = LosingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        console.log(currectLosing);
         return {
             playing: currectPlaying,
             winning: currectWinning,
