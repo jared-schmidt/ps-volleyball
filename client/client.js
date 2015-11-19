@@ -89,25 +89,25 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-    'click #highest': function(event) {
-        event.preventDefault();
+    'click #highest': function(e) {
+        e.preventDefault();
         Meteor.call('getHighestRecords', function(err, data) {
             console.log(data);
             $('#recordsCard').show();
             Session.set('records', data);
         });
     },
-    'change #activeSelect': function(event) {
-        event.preventDefault();
+    'change #activeSelect': function(e) {
+        e.preventDefault();
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeStatus', newValue);
     },
-    'click #teamsModal': function(event){
-        event.preventDefault();
+    'click #teamsModal': function(e){
+        e.preventDefault();
         $('#modal1').openModal();
     },
-    'click #createTeams': function(event) {
-        event.preventDefault();
+    'click #createTeams': function(e) {
+        e.preventDefault();
         if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage') {
 
             var mixed = shuffle(Meteor.users.find({
@@ -147,13 +147,13 @@ Template.hello.events({
             Materialize.toast('Need to be an admin', 4000);
         }
     },
-    'click #team1Win': function(event) {
-        event.preventDefault();
+    'click #team1Win': function(e) {
+        e.preventDefault();
         Meteor.call('markTeam1Win');
         Materialize.toast('Home Team Won!', 4000);
     },
-    'click #team2Win': function(event) {
-        event.preventDefault();
+    'click #team2Win': function(e) {
+        e.preventDefault();
         Meteor.call('markTeam2Win');
         Materialize.toast('Away Team Won!', 4000);
     },
