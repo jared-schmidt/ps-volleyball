@@ -40,6 +40,9 @@ Meteor.methods({
     changeUserStatus: function(newStatus, userId){
       Meteor.users.update({'_id': userId}, {$set:{'profile.active': newStatus}});
     },
+    changeUserTitle: function(newTitle, userId){
+        Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
+    },
     createTeams: function(){
         var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch()
 
