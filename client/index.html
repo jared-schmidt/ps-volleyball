@@ -141,7 +141,7 @@
                              {{#each players}}
                                 <tr>
                                     <td>{{profile.name}}</td>
-                                    <td>{{profile.title}}</td>
+                                    <td><input type="text" value={{profile.title}} /></td>
                                     <td>{{profile.active}}</td>
                                 </tr>
                             {{/each}}
@@ -168,6 +168,7 @@
                                <th>Name</th>
                                <th>Wins</th>
                                <th>lost</th>
+                               <th>Win %</th>
                                <th>winning streak</th>
                                <th>losing streak</th>
                                <th>playing streak</th>
@@ -179,6 +180,7 @@
                                      <td>{{this.name}}</td>
                                      <td>{{this.win}}</td>
                                      <td>{{this.lost}}</td>
+                                     <td>{{this.winPercentage}}</td>
                                      <td>{{this.winningStreak}}</td>
                                      <td>{{this.losingStreak}}</td>
                                      <td>{{this.playingStreak}}</td>

@@ -66,7 +66,7 @@ Template.hello.helpers({
     isAdmin: function() {
         console.log("checking admin")
         if (Meteor.user()) {
-            return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage';
+            return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage' || Meteor.user().profile.name === 'Peter Kohlway';
         }
         return false;
     },
@@ -108,7 +108,7 @@ Template.hello.events({
     },
     'click #createTeams': function(e) {
         e.preventDefault();
-        if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage') {
+        if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage'  || Meteor.user().profile.name === 'Peter Kohlway') {
 
             var mixed = shuffle(Meteor.users.find({
                 'profile.active': true

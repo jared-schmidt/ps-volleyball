@@ -1,5 +1,21 @@
 Meteor.startup(function() {
     // code to run on server at startup
+    if(Meteor.users.find().count() < 25){
+  _.each(_.range(25), function(){
+    var randomEmail = faker.internet.email();
+    var randomName = faker.name.findName();
+    var userName = faker.internet.userName();
+    Accounts.createUser({
+      username: userName,
+      profile: {
+        name: randomName,
+        active: true
+      },
+      email: randomEmail,
+      password: 'password'
+    });
+  });
+}
 });
 
 Meteor.publish('userData', function() {
@@ -10,7 +26,7 @@ Meteor.publish('userData', function() {
 });
 
 function isAdmin(){
-    return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage';
+    return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage' || Meteor.user().profile.name === 'Peter Kohlway';
 }
 
 Meteor.methods({
@@ -162,6 +178,7 @@ Meteor.methods({
                         found.playingStreak = 0;
                     }
                 }
+                found.winPercentage = (found.win / found.total).toFixed(3);
             });
 
         });
