@@ -142,7 +142,20 @@
                                 <tr>
                                     <td>{{profile.name}}</td>
                                     <td><input type="text" value={{profile.title}} /></td>
-                                    <td>{{profile.active}}</td>
+                                    <td>
+                                      {{#if isAdmin}}
+                                        <div class="switch">
+                                          <label>
+                                            Inactive
+                                            <input type="checkbox" class="user-active-toggle" checked={{profile.active}} />
+                                            <span class="lever"></span>
+                                            Active
+                                          </label>
+                                        </div>
+                                      {{else}}
+                                        {{booleanToString(profile.active)}}
+                                      {{/if}}
+                                    </td>
                                 </tr>
                             {{/each}}
                         </tbody>

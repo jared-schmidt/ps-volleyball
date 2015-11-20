@@ -31,7 +31,10 @@ function isAdmin(){
 
 Meteor.methods({
     changeStatus: function(newStatus){
-      Meteor.users.update({'_id': this.userId}, {$set:{'profile.active': newStatus}});
+        Meteor.call('changeUserStatus', newStatus, this.userId);
+    },
+    changeUserStatus: function(newStatus, userId){
+      Meteor.users.update({'_id': userId}, {$set:{'profile.active': newStatus}});
     },
     team1: function(team){
         console.log(isAdmin());

@@ -63,6 +63,9 @@ Template.hello.helpers({
             return [];
         }
     },
+    booleanToString: function(v) {
+        return v ? 'Yes' : 'No';
+    },
     isAdmin: function() {
         console.log("checking admin")
         if (Meteor.user()) {
@@ -101,6 +104,11 @@ Template.hello.events({
         e.preventDefault();
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeStatus', newValue);
+    },
+    'change .user-active-toggle' : function(e) {
+        e.preventDefault();
+        var newValue = $(e.target).is(":checked");
+        Meteor.call('changeUserStatus', newValue, this._id);
     },
     'click #teamsModal': function(e){
         e.preventDefault();
