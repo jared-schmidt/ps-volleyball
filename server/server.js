@@ -181,7 +181,9 @@ Meteor.methods({
                         found.playingStreak = 0;
                     }
                 }
-                found.winPercentage = (found.win / found.total).toFixed(3);
+                if(found){
+                    found.winPercentage = (found.win / found.total).toFixed(3);
+                }
             });
 
         });
