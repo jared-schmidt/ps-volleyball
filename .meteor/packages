@@ -33,3 +33,5 @@ materialize:materialize@=0.97.0
 #check
 mrt:momentjs
 raix:handlebar-helpers
+digilord:faker
+accounts-password
