@@ -1,21 +1,21 @@
 Meteor.startup(function() {
     // code to run on server at startup
-    if(Meteor.users.find().count() < 25){
-  _.each(_.range(25), function(){
-    var randomEmail = faker.internet.email();
-    var randomName = faker.name.findName();
-    var userName = faker.internet.userName();
-    Accounts.createUser({
-      username: userName,
-      profile: {
-        name: randomName,
-        active: true
-      },
-      email: randomEmail,
-      password: 'password'
-    });
-  });
-}
+//     if(Meteor.users.find().count() < 25){
+//   _.each(_.range(25), function(){
+//     var randomEmail = faker.internet.email();
+//     var randomName = faker.name.findName();
+//     var userName = faker.internet.userName();
+//     Accounts.createUser({
+//       username: userName,
+//       profile: {
+//         name: randomName,
+//         active: true
+//       },
+//       email: randomEmail,
+//       password: 'password'
+//     });
+//   });
+// }
 });
 
 Meteor.publish('userData', function() {
