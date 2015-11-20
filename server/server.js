@@ -36,6 +36,9 @@ Meteor.methods({
     changeUserStatus: function(newStatus, userId){
       Meteor.users.update({'_id': userId}, {$set:{'profile.active': newStatus}});
     },
+    changeUserTitle: function(newTitle, userId){
+        Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
+    },
     team1: function(team){
         console.log(isAdmin());
         if (isAdmin() && team.length > 1){

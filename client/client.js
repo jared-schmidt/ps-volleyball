@@ -110,6 +110,11 @@ Template.hello.events({
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeUserStatus', newValue, this._id);
     },
+    'change .input-field' : function(e){
+        e.preventDefault();
+        var newValue = $(e.target).val();
+        Meteor.call('changeUserTitle', newValue, this._id);
+    },
     'click #teamsModal': function(e){
         e.preventDefault();
         $('#modal1').openModal();

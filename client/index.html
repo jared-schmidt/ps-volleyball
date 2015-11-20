@@ -141,15 +141,21 @@
                              {{#each players}}
                                 <tr>
                                     <td>{{profile.name}}</td>
-                                    <td>{{profile.title}}</td>
+                                    <td>
+                                    {{#if isAdmin}}
+                                        <input type="text" class="input-field" value={{profile.title}} />
+                                    {{else}}
+                                        {{profile.title}}
+                                    {{/if}}
+                                    </td>
                                     <td>
                                       {{#if isAdmin}}
                                         <div class="switch">
                                           <label>
-                                            Inactive
+                                            <span style="color: white">Inactive</span>
                                             <input type="checkbox" class="user-active-toggle" checked={{profile.active}} />
                                             <span class="lever"></span>
-                                            Active
+                                            <span style="color: white">Active</span>
                                           </label>
                                         </div>
                                       {{else}}
