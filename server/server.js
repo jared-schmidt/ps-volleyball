@@ -18,6 +18,10 @@ Meteor.startup(function() {
 // }
 });
 
+function isOdd(num) {
+    return num % 2;
+}
+
 Meteor.publish('userData', function() {
   if(!this.userId) return null;
   return Meteor.users.find(this.userId, {fields: {
@@ -36,27 +40,48 @@ Meteor.methods({
     changeUserStatus: function(newStatus, userId){
       Meteor.users.update({'_id': userId}, {$set:{'profile.active': newStatus}});
     },
-    changeUserTitle: function(newTitle, userId){
-        Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
-    },
-    team1: function(team){
-        console.log(isAdmin());
-        if (isAdmin() && team.length > 1){
-            Team1.remove({});
-            Team1.insert({
-                'team': team,
-                'created': new Date()
-            });
+    createTeams: function(){
+        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch()
+
+        var mixed = _.shuffle(allActivePlayers);
+
+        var oddPerson = null;
+
+        if (isOdd(mixed.length)) {
+            oddPerson = mixed.pop();
         }
-    },
-    team2: function(team){
-        if (isAdmin() && team.length > 1){
-            Team2.remove({});
-            Team2.insert({
-                'team': team,
-                'created': new Date()
-            });
+
+        var halfLength = mixed.length / 2;
+        var totalLength = mixed.length;
+
+        var team1 = mixed.slice(0, halfLength);
+        var team2 = mixed.slice(halfLength, totalLength);
+
+        if (oddPerson) {
+            if ((Math.floor(Math.random() * 2) === 0)) {
+                team1.push(oddPerson);
+            } else {
+                team2.push(oddPerson);
+            }
         }
+
+        if (team1.length > 1 && team2.length > 1){
+            if (isAdmin()){
+                Team1.remove({});
+                Team1.insert({
+                    'team': team1,
+                    'created': new Date()
+                });
+
+                Team2.remove({});
+                Team2.insert({
+                    'team': team2,
+                    'created': new Date()
+                });
+            }
+        }
+
+
     },
     markTeam1Win: function(){
         if (isAdmin()){
@@ -184,7 +209,9 @@ Meteor.methods({
                         found.playingStreak = 0;
                     }
                 }
-                found.winPercentage = (found.win / found.total).toFixed(3);
+                if(found){
+                    found.winPercentage = (found.win / found.total).toFixed(3);
+                }
             });
 
         });

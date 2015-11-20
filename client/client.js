@@ -8,15 +8,6 @@ Session.setDefault('stats', []);
 Session.setDefault('pastTeams', []);
 Session.setDefault('records', {});
 
-function shuffle(o) {
-    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-}
-
-function isOdd(num) {
-    return num % 2;
-}
-
 
 Template.hello.helpers({
     dateFormat: function() {
@@ -122,40 +113,9 @@ Template.hello.events({
     'click #createTeams': function(e) {
         e.preventDefault();
         if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage'  || Meteor.user().profile.name === 'Peter Kohlway') {
-
-            var mixed = shuffle(Meteor.users.find({
-                'profile.active': true
-            }).fetch());
-
-            var oddPerson = null;
-
-            if (isOdd(mixed.length)) {
-                oddPerson = mixed.pop();
-            }
-
-            var halfLength = mixed.length / 2;
-            var totalLength = mixed.length;
-
-            var team1 = mixed.slice(0, halfLength);
-            var team2 = mixed.slice(halfLength, totalLength);
-
-            if (oddPerson) {
-                if ((Math.floor(Math.random() * 2) === 0)) {
-                    team1.push(oddPerson);
-                } else {
-                    team2.push(oddPerson);
-                }
-            }
-
-            if (team1.length > 1 && team2.length > 1){
-                Meteor.call('team1', team1);
-                Meteor.call('team2', team2);
-
-                Materialize.toast('Creating Teams!', 4000);
-            } else {
-                Materialize.toast('Not enough players!', 4000);
-            }
-
+            Meteor.call('createTeams', function(){
+                Materialize.toast('Created Teams!', 4000);
+            });
         } else {
             Materialize.toast('Need to be an admin', 4000);
         }
