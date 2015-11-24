@@ -90,18 +90,37 @@ Meteor.methods({
                 team2.push(oddPerson);
             }
         }
+        var count = 0;
+        var team1Percentage = 0.0;
+        var team2Percentage = 0.0;
+        _.each(team1, function(player){
+            count += 1;
+            console.log(player.profile.winPercentage);
+            team1Percentage += parseFloat(player.profile.winPercentage);
+            console.log(team1Percentage);
+        });
+        team1Percentage = parseFloat(team1Percentage) / parseInt(count);
 
+        count = 0;
+        _.each(team2, function(player){
+            count += 1;
+            team2Percentage += parseFloat(player.profile.winPercentage);
+        });
+        team2Percentage = parseFloat(team2Percentage) / parseInt(count);
+        console.log(team2Percentage);
         if (team1.length > 1 && team2.length > 1){
             if (isAdmin()){
                 Team1.remove({});
                 Team1.insert({
                     'team': team1,
+                    'teamPercentage': team1Percentage.toFixed(3),
                     'created': new Date()
                 });
 
                 Team2.remove({});
                 Team2.insert({
                     'team': team2,
+                    'teamPercentage': team2Percentage.toFixed(3),
                     'created': new Date()
                 });
             }
@@ -293,7 +312,9 @@ Meteor.methods({
             });
         }
 
-
+        _.each(playerCount, function(player){
+            Meteor.users.update({'_id': player._id}, {$set: {'profile.wins': player.win, 'profile.loses': player.lost, 'profile.winPercentage': player.winPercentage}});
+        });
         return {
             players: playerCount,
             newHigh: newHigh,

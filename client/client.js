@@ -32,10 +32,16 @@ Template.hello.helpers({
                 console.log("not home");
             }
             console.log("found team 1");
-            return team[0].team;
+            return {
+                'team': team[0].team,
+                'teamPercentage': team[0].teamPercentage
+            };
         } else {
             console.log("no team 1 found");
-            return [];
+            return {
+                'team': [],
+                'teamPercentage': 0
+            };
         }
     },
     team2: function() {
@@ -49,10 +55,16 @@ Template.hello.helpers({
                 console.log("not away");
             }
             console.log("found team 2");
-            return team[0].team;
+            return {
+                'team': team[0].team,
+                'teamPercentage': team[0].teamPercentage
+            };
         } else {
             console.log("no team 2 found");
-            return [];
+            return {
+                'team': [],
+                'teamPercentage': 0
+            };
         }
     },
     booleanToString: function(v) {
