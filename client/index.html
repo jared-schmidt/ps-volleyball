@@ -86,12 +86,13 @@
                 <div class="card-content white-text">
                     <span class="card-title">Away (Road)</span>
                     <ul style='list-style-type: decimal'>
-                        {{#each team2}}
+                        {{#each team2.team}}
                             <li>
                                 {{this.profile.name}}
                             </li>
                         {{/each}}
                     </ul>
+                    <h3>Team Win Percentage: {{team2.teamPercentage}}</h3>
                 </div>
                 {{#if isAdmin}}
                     <div class="card-action">
@@ -107,12 +108,13 @@
                 <div class="card-content white-text">
                     <span class="card-title">Home (Parking Lot)</span>
                     <ul style='list-style-type: decimal'>
-                        {{#each team1}}
+                        {{#each team1.team}}
                             <li>
                                 {{this.profile.name}}
                             </li>
                         {{/each}}
                     </ul>
+                    <h3>Team Win Percentage: {{team1.teamPercentage}}</h3>
                 </div>
                 {{#if isAdmin}}
                     <div class="card-action">
