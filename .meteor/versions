@@ -3,6 +3,7 @@ accounts-google@1.0.6
 accounts-oauth@1.1.8
 accounts-ui@1.1.6
 accounts-ui-unstyled@1.1.8
+alanning:roles@1.2.14
 autopublish@1.0.4
 autoupdate@1.2.4
 babel-compiler@5.8.24_1
@@ -71,6 +72,7 @@ retry@1.0.4
 routepolicy@1.0.6
 service-configuration@1.0.5
 session@1.1.1
+softwarerero:accounts-t9n@1.1.4
 spacebars@1.0.7
 spacebars-compiler@1.0.7
 standard-minifiers@1.0.2
@@ -80,5 +82,7 @@ tracker@1.0.9
 ui@1.0.8
 underscore@1.0.4
 url@1.0.5
+useraccounts:core@1.12.4
+useraccounts:materialize@1.12.4
 webapp@1.2.3
 webapp-hashing@1.0.5
