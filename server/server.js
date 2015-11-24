@@ -67,7 +67,7 @@ Meteor.methods({
         Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
     },
     createTeams: function(){
-        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch()
+        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch();
 
         var mixed = _.shuffle(allActivePlayers);
 
@@ -120,7 +120,8 @@ Meteor.methods({
                 PastTeams.insert({
                     winningTeam: Team1.findOne({}),
                     losingTeam: Team2.findOne({}),
-                    when: new Date()
+                    when: new Date(),
+                    side: 'Home'
                 });
 
                 Team1.remove({});
@@ -140,7 +141,8 @@ Meteor.methods({
                 PastTeams.insert({
                     winningTeam: Team2.findOne({}),
                     losingTeam: Team1.findOne({}),
-                    when: new Date()
+                    when: new Date(),
+                    side: 'Away'
                 });
 
                 Team1.remove({});
