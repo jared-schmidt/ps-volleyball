@@ -16,6 +16,29 @@ Meteor.startup(function() {
 //     });
 //   });
 // }
+
+
+    _.each(Meteor.users.find().fetch(), function(user){
+        var superAdmin = 'super-admin';
+        var admin = 'admin';
+        var userRole = 'user';
+
+        if (user._id){
+            var usersName = user.profile.name;
+
+            if (usersName === 'Jared Schmidt'){
+                Roles.addUsersToRoles(user._id, superAdmin, 'default-group');
+                console.log("Making " + user.profile.name + ' a ' + superAdmin);
+            } else if (usersName === 'Chris Scott' || usersName ===  'Jonathan Savage' || usersName === 'Peter Kohlway'){
+                Roles.addUsersToRoles(user._id, admin, 'default-group');
+                console.log("Making " + user.profile.name + ' a ' + admin);
+            } else {
+                Roles.addUsersToRoles(user._id, userRole, 'default-group');
+                console.log("Making " + user.profile.name + ' a ' + userRole);
+            }
+        }
+    });
+
 });
 
 function isOdd(num) {
@@ -30,7 +53,7 @@ Meteor.publish('userData', function() {
 });
 
 function isAdmin(){
-    return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage' || Meteor.user().profile.name === 'Peter Kohlway';
+    return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
 }
 
 Meteor.methods({
@@ -44,7 +67,7 @@ Meteor.methods({
         Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
     },
     createTeams: function(){
-        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch()
+        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch();
 
         var mixed = _.shuffle(allActivePlayers);
 
@@ -116,7 +139,8 @@ Meteor.methods({
                 PastTeams.insert({
                     winningTeam: Team1.findOne({}),
                     losingTeam: Team2.findOne({}),
-                    when: new Date()
+                    when: new Date(),
+                    side: 'Home'
                 });
 
                 Team1.remove({});
@@ -136,7 +160,8 @@ Meteor.methods({
                 PastTeams.insert({
                     winningTeam: Team2.findOne({}),
                     losingTeam: Team1.findOne({}),
-                    when: new Date()
+                    when: new Date(),
+                    side: 'Away'
                 });
 
                 Team1.remove({});

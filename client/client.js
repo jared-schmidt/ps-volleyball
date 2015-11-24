@@ -14,6 +14,7 @@ Template.hello.helpers({
         return moment(this.when).format('LL');
     },
     players: function() {
+        console.log(Meteor.users.find({}).fetch());
         return Meteor.users.find({}, {
             sort: {
                 'profile.wins': -1
@@ -28,7 +29,7 @@ Template.hello.helpers({
                     _id: Meteor.userId()
                 })) {
             } else {
-                console.log("not home")
+                console.log("not home");
             }
             console.log("found team 1");
             return {
@@ -36,7 +37,7 @@ Template.hello.helpers({
                 'teamPercentage': team[0].teamPercentage
             };
         } else {
-            console.log("no team 1 found")
+            console.log("no team 1 found");
             return {
                 'team': [],
                 'teamPercentage': 0
@@ -51,9 +52,9 @@ Template.hello.helpers({
                     _id: Meteor.userId()
                 })) {
             } else {
-                console.log("not away")
+                console.log("not away");
             }
-            console.log("found team 2")
+            console.log("found team 2");
             return {
                 'team': team[0].team,
                 'teamPercentage': team[0].teamPercentage
@@ -70,11 +71,7 @@ Template.hello.helpers({
         return v ? 'Yes' : 'No';
     },
     isAdmin: function() {
-        console.log("checking admin")
-        if (Meteor.user()) {
-            return Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage' || Meteor.user().profile.name === 'Peter Kohlway';
-        }
-        return false;
+        return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
     },
     isActive: function() {
         console.log("checking is active");
@@ -124,7 +121,7 @@ Template.hello.events({
     },
     'click #createTeams': function(e) {
         e.preventDefault();
-        if (Meteor.user().profile.name === 'Jared Schmidt' || Meteor.user().profile.name === 'Chris Scott' || Meteor.user().profile.name === 'Jonathan Savage'  || Meteor.user().profile.name === 'Peter Kohlway') {
+        if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
             Meteor.call('createTeams', function(){
                 Materialize.toast('Created Teams!', 4000);
             });
