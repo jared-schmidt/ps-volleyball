@@ -1,35 +1,35 @@
 Meteor.startup(function() {
     // code to run on server at startup
-//     if(Meteor.users.find().count() < 25){
-//   _.each(_.range(25), function(){
-//     var randomEmail = faker.internet.email();
-//     var randomName = faker.name.findName();
-//     var userName = faker.internet.userName();
-//     Accounts.createUser({
-//       username: userName,
-//       profile: {
-//         name: randomName,
-//         active: true
-//       },
-//       email: randomEmail,
-//       password: 'password'
-//     });
-//   });
-// }
+    // if (Meteor.users.find().count() < 25) {
+    //     _.each(_.range(25), function() {
+    //         var randomEmail = faker.internet.email();
+    //         var randomName = faker.name.findName();
+    //         var userName = faker.internet.userName();
+    //         Accounts.createUser({
+    //             username: userName,
+    //             profile: {
+    //                 name: randomName,
+    //                 active: true
+    //             },
+    //             email: randomEmail,
+    //             password: 'password'
+    //         });
+    //     });
+    // }
 
 
-    _.each(Meteor.users.find().fetch(), function(user){
+    _.each(Meteor.users.find().fetch(), function(user) {
         var superAdmin = 'super-admin';
         var admin = 'admin';
         var userRole = 'user';
 
-        if (user._id){
+        if (user._id) {
             var usersName = user.profile.name;
 
-            if (usersName === 'Jared Schmidt'){
+            if (usersName === 'Jared Schmidt') {
                 Roles.addUsersToRoles(user._id, superAdmin, 'default-group');
                 console.log("Making " + user.profile.name + ' a ' + superAdmin);
-            } else if (usersName === 'Chris Scott' || usersName ===  'Jonathan Savage' || usersName === 'Peter Kohlway'){
+            } else if (usersName === 'Chris Scott' || usersName === 'Jonathan Savage' || usersName === 'Peter Kohlway') {
                 Roles.addUsersToRoles(user._id, admin, 'default-group');
                 console.log("Making " + user.profile.name + ' a ' + admin);
             } else {
@@ -46,28 +46,53 @@ function isOdd(num) {
 }
 
 Meteor.publish('userData', function() {
-  if(!this.userId) return null;
-  return Meteor.users.find(this.userId, {fields: {
-    wins: 1,
-  }});
+    if (!this.userId) return null;
+    return Meteor.users.find(this.userId, {
+        fields: {
+            wins: 1,
+        }
+    });
 });
 
-function isAdmin(){
+function isAdmin() {
     return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
 }
 
+function multiplemax(arr, compare) {
+    var max = _.max(arr, function(v) {
+        return v[compare];
+    });
+    return _.filter(arr, function(v) {
+        return v[compare] == max[compare];
+    });
+}
+
 Meteor.methods({
-    changeStatus: function(newStatus){
+    changeStatus: function(newStatus) {
         Meteor.call('changeUserStatus', newStatus, this.userId);
     },
-    changeUserStatus: function(newStatus, userId){
-      Meteor.users.update({'_id': userId}, {$set:{'profile.active': newStatus}});
+    changeUserStatus: function(newStatus, userId) {
+        Meteor.users.update({
+            '_id': userId
+        }, {
+            $set: {
+                'profile.active': newStatus
+            }
+        });
     },
-    changeUserTitle: function(newTitle, userId){
-        Meteor.users.update({'_id': userId}, {$set:{'profile.title': newTitle}});
+    changeUserTitle: function(newTitle, userId) {
+        Meteor.users.update({
+            '_id': userId
+        }, {
+            $set: {
+                'profile.title': newTitle
+            }
+        });
     },
-    createTeams: function(){
-        var allActivePlayers = Meteor.users.find({ 'profile.active': true }).fetch();
+    createTeams: function() {
+        var allActivePlayers = Meteor.users.find({
+            'profile.active': true
+        }).fetch();
 
         var mixed = _.shuffle(allActivePlayers);
 
@@ -93,7 +118,7 @@ Meteor.methods({
         var count = 0;
         var team1Percentage = 0.0;
         var team2Percentage = 0.0;
-        _.each(team1, function(player){
+        _.each(team1, function(player) {
             count += 1;
             console.log(player.profile.winPercentage);
             team1Percentage += parseFloat(player.profile.winPercentage);
@@ -102,14 +127,14 @@ Meteor.methods({
         team1Percentage = parseFloat(team1Percentage) / parseInt(count);
 
         count = 0;
-        _.each(team2, function(player){
+        _.each(team2, function(player) {
             count += 1;
             team2Percentage += parseFloat(player.profile.winPercentage);
         });
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
         console.log(team2Percentage);
-        if (team1.length > 1 && team2.length > 1){
-            if (isAdmin()){
+        if (team1.length > 1 && team2.length > 1) {
+            if (isAdmin()) {
                 Team1.remove({});
                 Team1.insert({
                     'team': team1,
@@ -128,12 +153,18 @@ Meteor.methods({
 
 
     },
-    markTeam1Win: function(){
-        if (isAdmin()){
+    markTeam1Win: function() {
+        if (isAdmin()) {
             var team = Team1.findOne({});
-                if (team && team.team.length > 1){
-                _.each(team.team, function(player){
-                    Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
+            if (team && team.team.length > 1) {
+                _.each(team.team, function(player) {
+                    Meteor.users.update({
+                        '_id': player._id
+                    }, {
+                        $inc: {
+                            'profile.wins': 1
+                        }
+                    });
                 });
 
                 PastTeams.insert({
@@ -146,15 +177,21 @@ Meteor.methods({
                 Team1.remove({});
                 Team2.remove({});
             }
+            Meteor.call('fixTotalGamesPlayer');
         }
-
     },
-    markTeam2Win: function(){
-        if (isAdmin()){
+    markTeam2Win: function() {
+        if (isAdmin()) {
             var team = Team2.findOne({});
-            if (team && team.team.length > 1){
-                _.each(team.team, function(player){
-                    Meteor.users.update({'_id': player._id}, {$inc:{'profile.wins': 1}});
+            if (team && team.team.length > 1) {
+                _.each(team.team, function(player) {
+                    Meteor.users.update({
+                        '_id': player._id
+                    }, {
+                        $inc: {
+                            'profile.wins': 1
+                        }
+                    });
                 });
 
                 PastTeams.insert({
@@ -167,37 +204,60 @@ Meteor.methods({
                 Team1.remove({});
                 Team2.remove({});
             }
+            Meteor.call('fixTotalGamesPlayer');
         }
     },
-    pastTeams: function(){
-        var pastGames = PastTeams.find({}, {sort: {'created': -1}}).fetch();
+    pastTeams: function() {
+        var pastGames = PastTeams.find({}, {
+            sort: {
+                'created': -1
+            }
+        }).fetch();
         return pastGames;
     },
-    getHighestRecords: function(){
-        var currectPlaying = PlayingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
-        var currectWinning = WinningStreak.find({}, {sort: {'score': -1}}).fetch()[0];
-        var currectLosing = LosingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
-        console.log(currectLosing);
+    getHighestRecords: function() {
+        var currectPlaying = PlayingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        var currectWinning = WinningStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        var currectLosing = LosingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        console.log(currectPlaying);
         return {
             playing: currectPlaying,
             winning: currectWinning,
             losing: currectLosing
-        }
+        };
     },
-    fixTotalGamesPlayer: function(){
+    fixTotalGamesPlayer: function() {
         var allPlayers = Meteor.users.find().fetch();
 
-        var pastGames = PastTeams.find({}, {sort: {'created': -1}}).fetch();
+        var pastGames = PastTeams.find({}, {
+            sort: {
+                'created': -1
+            }
+        }).fetch();
 
         var playerCount = [];
 
-        _.each(pastGames, function(game){
+        _.each(pastGames, function(game) {
             var win = game.winningTeam.team;
             var lose = game.losingTeam.team;
 
-            _.each(win, function(player){
-                var found = _.findWhere(playerCount, {_id: player._id});
-                if (found){
+            _.each(win, function(player) {
+                var found = _.findWhere(playerCount, {
+                    _id: player._id
+                });
+                if (found) {
                     found.total += 1;
                     found.win += 1;
                     found.winningStreak += 1;
@@ -217,9 +277,11 @@ Meteor.methods({
                 }
             });
 
-            _.each(lose, function(player){
-                var found = _.findWhere(playerCount, {_id: player._id});
-                if (found){
+            _.each(lose, function(player) {
+                var found = _.findWhere(playerCount, {
+                    _id: player._id
+                });
+                if (found) {
                     found.total += 1;
                     found.lost += 1;
                     found.winningStreak = 0;
@@ -239,81 +301,142 @@ Meteor.methods({
                 }
             });
 
-            _.each(allPlayers, function(player){
-                var playerOnTeam = _.findWhere(win, {'_id': player._id});
-                if (!playerOnTeam){
-                    playerOnTeam = _.findWhere(lose, {'_id': player._id});
+            _.each(allPlayers, function(player) {
+                var playerOnTeam = _.findWhere(win, {
+                    '_id': player._id
+                });
+                if (!playerOnTeam) {
+                    playerOnTeam = _.findWhere(lose, {
+                        '_id': player._id
+                    });
                 }
 
-                var found = _.findWhere(playerCount, {_id: player._id});
-                if (playerOnTeam){
-                    if (found){
+                var found = _.findWhere(playerCount, {
+                    _id: player._id
+                });
+                if (playerOnTeam) {
+                    if (found) {
                         found.playingStreak += 1;
                     }
                 } else {
 
-                    if (found){
+                    if (found) {
                         found.playingStreak = 0;
                     }
                 }
-                if(found){
+                if (found) {
                     found.winPercentage = (found.win / found.total).toFixed(3);
                 }
             });
 
         });
 
-        var highestPlayingStreak = _.max(playerCount, function(player){ return player.playingStreak; });
-        var highestLosingStreak = _.max(playerCount, function(player){ return player.losingStreak; });
-        var highestWinningStreak = _.max(playerCount, function(player){ return player.winningStreak; });
+        var highestPlayingStreak = multiplemax(playerCount, 'playingStreak');
+        var highestLosingStreak = multiplemax(playerCount, 'losingStreak');
+        var highestWinningStreak = multiplemax(playerCount, 'winningStreak');
+
+
+        // var highestPlayingStreak = _.max(playerCount, function(player){ return player.playingStreak; });
+        // var highestLosingStreak = _.max(playerCount, function(player){ return player.losingStreak; });
+        // var highestWinningStreak = _.max(playerCount, function(player){ return player.winningStreak; });
 
         var newHigh = false;
         var newLow = false;
         var newPlay = false;
 
-        var currectPlaying = PlayingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        var currectPlaying = PlayingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
         console.log(currectPlaying);
 
-        if (!currectPlaying || highestPlayingStreak.playingStreak > currectPlaying.score ){
+        if (!currectPlaying || highestPlayingStreak[0].playingStreak > currectPlaying.score) {
             console.log("NEW PLAYING RECORD");
             newPlay = true;
 
+            var names = [];
+            var ids = [];
+
+            _.each(highestPlayingStreak, function(top) {
+                names.push(top.name);
+                ids.push(top.ids);
+            });
+
+            console.log(names);
+
             PlayingStreak.insert({
-                name: highestPlayingStreak.name,
-                playerId:  highestPlayingStreak._id,
+                name: names,
+                playerId: ids,
                 score: highestPlayingStreak.playingStreak,
                 when: new Date()
             });
         }
 
-        var currectWinning = WinningStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        var currectWinning = WinningStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
         console.log(currectWinning);
-        if (!currectWinning || highestWinningStreak.winningStreak > currectWinning.score ){
+        if (!currectWinning || highestWinningStreak[0].winningStreak > currectWinning.score) {
             console.log("NEW WINNING RECORD");
             newHigh = true;
+
+            var names = [];
+            var ids = [];
+
+            _.each(highestPlayingStreak, function(top) {
+                names.push(top.name);
+                ids.push(top.ids);
+            });
+
             WinningStreak.insert({
-                name: highestWinningStreak.name,
-                playerId:  highestWinningStreak._id,
+                name: names,
+                playerId: ids,
                 score: highestWinningStreak.winningStreak,
                 when: new Date()
             });
         }
 
-        var currectLosing = LosingStreak.find({}, {sort: {'score': -1}}).fetch()[0];
+        var currectLosing = LosingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
         console.log(currectLosing);
-        if (!currectLosing || highestLosingStreak.losingStreak > currectLosing.score ){
+        if (!currectLosing || highestLosingStreak[0].losingStreak > currectLosing.score) {
             console.log("NEW LOSING RECORD");
             newLow = true;
+
+            var names = [];
+            var ids = [];
+
+            _.each(highestPlayingStreak, function(top) {
+                names.push(top.name);
+                ids.push(top.ids);
+            });
+
+            console.log(names);
+
             LosingStreak.insert({
-                name: highestLosingStreak.name,
-                playerId:  highestLosingStreak._id,
+                name: names,
+                playerId: ids,
                 score: highestLosingStreak.losingStreak,
                 when: new Date()
             });
         }
 
-        _.each(playerCount, function(player){
-            Meteor.users.update({'_id': player._id}, {$set: {'profile.wins': player.win, 'profile.loses': player.lost, 'profile.winPercentage': player.winPercentage}});
+        _.each(playerCount, function(player) {
+            Meteor.users.update({
+                '_id': player._id
+            }, {
+                $set: {
+                    'profile.wins': player.win,
+                    'profile.loses': player.lost,
+                    'profile.winPercentage': player.winPercentage
+                }
+            });
         });
         return {
             players: playerCount,
