@@ -78,27 +78,60 @@ Template.hello.helpers({
         return Meteor.user().profile.active;
     },
     stats: function() {
-        console.log("gettings stats");
-        return Session.get('stats');
+        console.log(Meteor.users.find({}));
+        return Meteor.users.find({});
     },
     pastTeams: function() {
-        console.log('getting past teams');
-        return Session.get('pastTeams');
+        var pastGames = PastTeams.find({}, {
+            sort: {
+                'created': -1
+            }
+        }).fetch();
+        return pastGames;
     },
     records: function() {
-        console.log("gettings records");
-        return Session.get('records');
+        var currectPlaying = PlayingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        var currectWinning = WinningStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        var currectLosing = LosingStreak.find({}, {
+            sort: {
+                'score': -1
+            }
+        }).fetch()[0];
+        return {
+            playing: currectPlaying,
+            winning: currectWinning,
+            losing: currectLosing
+        };
     }
 });
 
 Template.hello.events({
+    'click #endSeason': function(e){
+        e.preventDefault();
+        Meteor.call('endSeason', function(err, status){
+            if (err){
+                Materialize.toast('Error!', 4000);
+                console.error(err);
+            }
+
+            if (status){
+                Materialize.toast('Cleared everything!', 4000);
+            } else {
+                Materialize.toast('Did nothing...', 4000);
+            }
+        });
+    },
     'click #highest': function(e) {
         e.preventDefault();
-        Meteor.call('getHighestRecords', function(err, data) {
-            console.log(data);
-            $('#recordsCard').show();
-            Session.set('records', data);
-        });
+
     },
     'change #activeSelect': function(e) {
         e.preventDefault();
@@ -118,6 +151,10 @@ Template.hello.events({
     'click #teamsModal': function(e){
         e.preventDefault();
         $('#modal1').openModal();
+    },
+    'click #endSeasonModalBtn': function(e){
+        e.preventDefault();
+        $('#endSeasonModal').openModal();
     },
     'click #createTeams': function(e) {
         e.preventDefault();
@@ -141,19 +178,10 @@ Template.hello.events({
     },
     'click #fix': function(e) {
         e.preventDefault();
-        Meteor.call('fixTotalGamesPlayer', function(err, data) {
-            console.log(data);
-            Session.set('stats', data.players);
-            $('#stats').show();
-        });
     },
     'click #pastTeamsBtn': function(e) {
         e.preventDefault();
-        Meteor.call('pastTeams', function(err, data) {
-            console.log(data);
-            Session.set('pastTeams', data);
-            $('#pastTeams').show();
-        });
+
     }
 
 });
