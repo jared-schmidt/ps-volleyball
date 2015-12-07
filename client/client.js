@@ -73,6 +73,9 @@ Template.hello.helpers({
     isAdmin: function() {
         return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
     },
+    isSuperAdmin: function(){
+        return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
+    },
     isActive: function() {
         console.log("checking is active");
         return Meteor.user().profile.active;
@@ -84,7 +87,7 @@ Template.hello.helpers({
     pastTeams: function() {
         var pastGames = PastTeams.find({}, {
             sort: {
-                'created': -1
+                'when': 1
             }
         }).fetch();
         return pastGames;
@@ -178,6 +181,7 @@ Template.hello.events({
     },
     'click #fix': function(e) {
         e.preventDefault();
+        Meteor.call('fixTotalGamesPlayer');
     },
     'click #pastTeamsBtn': function(e) {
         e.preventDefault();
