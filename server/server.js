@@ -100,6 +100,8 @@ Meteor.methods({
 
         var mixed = _.shuffle(allActivePlayers);
 
+        mixed = _.shuffle(mixed);
+
         var oddPerson = null;
 
         if (isOdd(mixed.length)) {
