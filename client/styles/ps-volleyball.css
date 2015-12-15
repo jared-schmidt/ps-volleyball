@@ -4,3 +4,15 @@
 td, th {
     text-align: center;
 }
+
+#loading-div {
+  width: 100%;
+  margin: auto;
+  padding-top: 15%;
+  text-align: center;
+}
+
+#loading-div img {
+  display: block;
+  margin: auto;
+}
