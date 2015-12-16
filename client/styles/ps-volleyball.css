@@ -16,3 +16,16 @@ td, th {
   display: block;
   margin: auto;
 }
+
+#removePlayer {
+  color: darkred;
+  cursor: pointer;
+}
+
+#makeHome {
+  color: white;
+}
+
+#makeAway {
+  color: white;
+}

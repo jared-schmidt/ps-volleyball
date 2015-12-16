@@ -108,7 +108,7 @@
                         <ul style='list-style-type: decimal'>
                             {{#each team2.team}}
                                 <li>
-                                    {{this.profile.name}}
+                                    {{this.profile.name}} {{#if isAdmin}}<i id='removePlayer' team-id='2' class="fa fa-times"></i>{{/if}}
                                 </li>
                             {{/each}}
                         </ul>
@@ -131,7 +131,7 @@
                         <ul style='list-style-type: decimal'>
                             {{#each team1.team}}
                                 <li>
-                                    {{this.profile.name}}
+                                    {{this.profile.name}} {{#if isAdmin}}<i id='removePlayer' team-id='1' class="fa fa-times"></i>{{/if}}
                                 </li>
                             {{/each}}
                         </ul>
@@ -154,6 +154,9 @@
                       <span class="card-title">Roster</span>
                       <table>
                           <thead>
+                              {{#if isAdmin}}
+                              <th>Add to team</th>
+                              {{/if}}
                               <th>Name</th>
                               <th>Title</th>
                               <th>Active</th>
@@ -161,7 +164,9 @@
                          <tbody>
                              {{#each players}}
                                 <tr>
+                                    {{#if isAdmin}}
                                     <td><a href='#' id='makeHome'>Home</a> | <a id='makeAway' href='#'>Away</a></td>
+                                    {{/if}}
                                     <td>{{profile.name}}</td>
                                     <td>
                                     {{#if isAdmin}}
