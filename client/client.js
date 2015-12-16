@@ -147,6 +147,20 @@ Template.hello.events({
             }
         });
     },
+    'click #removePlayer': function(e) {
+      e.preventDefault();
+      var teamId = $(e.currentTarget).attr("team-id");
+      Meteor.call('removePlayer', {'id': this._id, 'teamId': teamId}, function(err, status) {
+        if (err) {
+          Materialize.toast('Error!', 4000);
+        }
+        if (status) {
+          Materialize.toast('Player Removed!', 4000);
+        } else {
+          Materialize.toast('Shit if I number...', 4000);
+        }
+      });
+    },
     'click #endSeason': function(e){
         e.preventDefault();
         Meteor.call('endSeason', function(err, status){

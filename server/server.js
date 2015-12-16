@@ -71,9 +71,22 @@ function multiplemax(arr, compare) {
     });
 }
 
+function playerExists(team, playerId) {
+  var status = false;
+  console.log(playerId);
+  // console.log(team);
+  _.each(team, function(player) {
+    console.log(player._id == playerId);
+    if (player._id == playerId) {
+      status = true;
+    }
+  });
+  return status;
+}
+
 Meteor.methods({
     addToHome: function(userId){
-        if (isSuperAdmin()) {
+        if (isAdmin()) {
             var foundPlayer = Meteor.users.find({'_id': userId}).fetch()[0];
 
             var count = 0;
@@ -83,7 +96,17 @@ Meteor.methods({
 
             if (team1){
                 team1 = team1.team;
-                team1.push(foundPlayer);
+                if (playerExists(team1, userId)) {
+                  return false;
+                } else {
+                  var team2 = Team2.find().fetch()[0];
+                  if (team2) {
+                    if (playerExists(team2.team, userId)) {
+                      return false;
+                    }
+                  }
+                  team1.push(foundPlayer);
+                }
             } else {
                 team1 = [foundPlayer];
             }
@@ -107,7 +130,7 @@ Meteor.methods({
         }
     },
     addToAway: function(userId){
-        if (isSuperAdmin()) {
+        if (isAdmin()) {
             var foundPlayer = Meteor.users.find({'_id': userId}).fetch()[0];
 
             var count = 0;
@@ -117,7 +140,17 @@ Meteor.methods({
 
             if (team2){
                 team2 = team2.team;
-                team2.push(foundPlayer);
+                if (playerExists(team2, userId)) {
+                  return false;
+                } else {
+                  var team1 = Team1.find().fetch()[0];
+                  if (team1) {
+                    if (playerExists(team1.team, userId)) {
+                      return false;
+                    }
+                  }
+                  team2.push(foundPlayer);
+                }
             } else {
                 team2 = [foundPlayer];
             }
@@ -139,6 +172,47 @@ Meteor.methods({
         } else {
             return false;
         }
+    },
+    removePlayer: function(user) {
+      if (isAdmin()) {
+        // var foundPlayer = Meteor.users.find({'_id': user.id}).fetch()[0];
+        var team;
+        if (user.teamId == 1) {
+          team = Team1.find().fetch()[0].team;
+        } else if (user.teamId == 2) {
+          team = Team2.find().fetch()[0].team;
+        } else {
+          return false;
+        }
+        var count = 0;
+        var teamPercentage = 0.0;
+        for (var i = 0; i < team.length; i++) {
+          var player = team[i];
+          if (player._id === user.id) {
+            team.splice(i, 1);
+            i--;
+          } else {
+            count += 1;
+            teamPercentage += parseFloat(player.profile.winPercentage);
+          }
+        }
+        if (user.teamId == 1) {
+          Team1.remove({});
+          Team1.insert({
+              'team': team,
+              'teamPercentage': teamPercentage.toFixed(3),
+              'created': new Date()
+          });
+        } else {
+          Team2.remove({});
+          Team2.insert({
+              'team': team,
+              'teamPercentage': teamPercentage.toFixed(3),
+              'created': new Date()
+          });
+        }
+        return true;
+      }
     },
     changeStatus: function(newStatus) {
         Meteor.call('changeUserStatus', newStatus, this.userId);
