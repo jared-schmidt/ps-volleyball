@@ -72,6 +72,74 @@ function multiplemax(arr, compare) {
 }
 
 Meteor.methods({
+    addToHome: function(userId){
+        if (isSuperAdmin()) {
+            var foundPlayer = Meteor.users.find({'_id': userId}).fetch()[0];
+
+            var count = 0;
+            var team1Percentage = 0.0;
+
+            var team1 = Team1.find().fetch()[0];
+
+            if (team1){
+                team1 = team1.team;
+                team1.push(foundPlayer);
+            } else {
+                team1 = [foundPlayer];
+            }
+
+            _.each(team1, function(player) {
+                count += 1;
+                team1Percentage += parseFloat(player.profile.winPercentage);
+            });
+            team1Percentage = parseFloat(team1Percentage) / parseInt(count);
+
+            Team1.remove({});
+            Team1.insert({
+                'team': team1,
+                'teamPercentage': team1Percentage.toFixed(3),
+                'created': new Date()
+            });
+
+            return true;
+        } else {
+            return false;
+        }
+    },
+    addToAway: function(userId){
+        if (isSuperAdmin()) {
+            var foundPlayer = Meteor.users.find({'_id': userId}).fetch()[0];
+
+            var count = 0;
+            var team2Percentage = 0.0;
+
+            var team2 = Team2.find().fetch()[0];
+
+            if (team2){
+                team2 = team2.team;
+                team2.push(foundPlayer);
+            } else {
+                team2 = [foundPlayer];
+            }
+
+            _.each(team2, function(player) {
+                count += 1;
+                team2Percentage += parseFloat(player.profile.winPercentage);
+            });
+            team2Percentage = parseFloat(team2Percentage) / parseInt(count);
+
+            Team2.remove({});
+            Team2.insert({
+                'team': team2,
+                'teamPercentage': team2Percentage.toFixed(3),
+                'created': new Date()
+            });
+
+            return true;
+        } else {
+            return false;
+        }
+    },
     changeStatus: function(newStatus) {
         Meteor.call('changeUserStatus', newStatus, this.userId);
     },

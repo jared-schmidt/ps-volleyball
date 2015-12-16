@@ -117,6 +117,36 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
+    'click #makeHome': function(e){
+        e.preventDefault();
+        Meteor.call('addToHome', this._id, function(err, status){
+            if (err){
+                Materialize.toast('Error!', 4000);
+                console.error(err);
+            }
+
+            if (status){
+                Materialize.toast('Added to Home!', 4000);
+            } else {
+                Materialize.toast('Did nothing...', 4000);
+            }
+        });
+    },
+    'click #makeAway': function(e){
+        e.preventDefault();
+        Meteor.call('addToAway', this._id, function(err, status){
+            if (err){
+                Materialize.toast('Error!', 4000);
+                console.error(err);
+            }
+
+            if (status){
+                Materialize.toast('Added to Home!', 4000);
+            } else {
+                Materialize.toast('Did nothing...', 4000);
+            }
+        });
+    },
     'click #endSeason': function(e){
         e.preventDefault();
         Meteor.call('endSeason', function(err, status){
