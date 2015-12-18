@@ -34,13 +34,15 @@ Template.hello.helpers({
             console.log("found team 1");
             return {
                 'team': team[0].team,
-                'teamPercentage': team[0].teamPercentage
+                'teamPercentage': team[0].teamPercentage,
+                'random': team[0].random
             };
         } else {
             console.log("no team 1 found");
             return {
                 'team': [],
-                'teamPercentage': 0
+                'teamPercentage': 0,
+                'random': team[0].random
             };
         }
     },
@@ -57,13 +59,15 @@ Template.hello.helpers({
             console.log("found team 2");
             return {
                 'team': team[0].team,
-                'teamPercentage': team[0].teamPercentage
+                'teamPercentage': team[0].teamPercentage,
+                'random': team[0].random
             };
         } else {
             console.log("no team 2 found");
             return {
                 'team': [],
-                'teamPercentage': 0
+                'teamPercentage': 0,
+                'random': team[0].random
             };
         }
     },
@@ -90,6 +94,7 @@ Template.hello.helpers({
                 'when': 1
             }
         }).fetch();
+        console.log(pastGames);
         return pastGames;
     },
     records: function() {

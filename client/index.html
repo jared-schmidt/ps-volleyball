@@ -105,7 +105,7 @@
             <div class="col s12 m6">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">Away (Road) {{#if team2.team}}&mdash; {{team2.teamPercentage}}{{/if}}</span>
+                        <span class="card-title">Away (Road) {{#if team2.team}}&mdash; {{team2.teamPercentage}}{{/if}} - {{#if team2.random }}Random Team{{else}}Custom Team{{/if}}</span>
                         <ul style='list-style-type: decimal'>
                             {{#each team2.team}}
                                 <li>
@@ -128,7 +128,7 @@
             <div class="col s12 m6">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">Home (Parking Lot) {{#if team1.team}}&mdash; {{team1.teamPercentage}}{{/if}}</span>
+                        <span class="card-title">Home (Parking Lot) {{#if team1.team}}&mdash; {{team1.teamPercentage}}{{/if}} - {{#if team1.random }}Random Team{{else}}Custom Team{{/if}}</span>
                         <ul style='list-style-type: decimal'>
                             {{#each team1.team}}
                                 <li>
@@ -253,6 +253,7 @@
                         <table>
                             <thead>
                                 <th>Date</th>
+                                <th>Side</th>
                                 <th>Winning Team</th>
                                 <th>Losing Team</th>
                             </thead>
@@ -262,6 +263,7 @@
                                       <td>
                                           {{dateFormat}}
                                       </td>
+                                      <td>{{side}}</td>
                                       <td>
                                           <ul>
                                               {{#each winningTeam.team}}

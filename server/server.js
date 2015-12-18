@@ -73,10 +73,7 @@ function multiplemax(arr, compare) {
 
 function playerExists(team, playerId) {
   var status = false;
-  console.log(playerId);
-  // console.log(team);
   _.each(team, function(player) {
-    console.log(player._id == playerId);
     if (player._id == playerId) {
       status = true;
     }
@@ -85,6 +82,13 @@ function playerExists(team, playerId) {
 }
 
 Meteor.methods({
+    log: function(did){
+        Logs.insert({
+            'user': Meteor.user()._id,
+            'did': did,
+            'when': new Date()
+        });
+    },
     addToHome: function(userId){
         if (isAdmin()) {
             var foundPlayer = Meteor.users.find({'_id': userId}).fetch()[0];
@@ -105,9 +109,11 @@ Meteor.methods({
                       return false;
                     }
                   }
+                  Meteor.call('log', 'Added Player to home team');
                   team1.push(foundPlayer);
                 }
             } else {
+                Meteor.call('log', 'Added Player to home team');
                 team1 = [foundPlayer];
             }
 
@@ -121,7 +127,8 @@ Meteor.methods({
             Team1.insert({
                 'team': team1,
                 'teamPercentage': team1Percentage.toFixed(3),
-                'created': new Date()
+                'created': new Date(),
+                'random': false
             });
 
             return true;
@@ -149,9 +156,11 @@ Meteor.methods({
                       return false;
                     }
                   }
+                  Meteor.call('log', 'Added Player to away team');
                   team2.push(foundPlayer);
                 }
             } else {
+                Meteor.call('log', 'Added Player to away team');
                 team2 = [foundPlayer];
             }
 
@@ -165,7 +174,8 @@ Meteor.methods({
             Team2.insert({
                 'team': team2,
                 'teamPercentage': team2Percentage.toFixed(3),
-                'created': new Date()
+                'created': new Date(),
+                'random': false
             });
 
             return true;
@@ -201,14 +211,16 @@ Meteor.methods({
           Team1.insert({
               'team': team,
               'teamPercentage': teamPercentage.toFixed(3),
-              'created': new Date()
+              'created': new Date(),
+              'random': false
           });
         } else {
           Team2.remove({});
           Team2.insert({
               'team': team,
               'teamPercentage': teamPercentage.toFixed(3),
-              'created': new Date()
+              'created': new Date(),
+              'random': false
           });
         }
         return true;
@@ -284,14 +296,16 @@ Meteor.methods({
                 Team1.insert({
                     'team': team1,
                     'teamPercentage': team1Percentage.toFixed(3),
-                    'created': new Date()
+                    'created': new Date(),
+                    'random': true
                 });
 
                 Team2.remove({});
                 Team2.insert({
                     'team': team2,
                     'teamPercentage': team2Percentage.toFixed(3),
-                    'created': new Date()
+                    'created': new Date(),
+                    'random': true
                 });
             }
         }
