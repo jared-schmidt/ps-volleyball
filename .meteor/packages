@@ -28,7 +28,7 @@ fortawesome:fontawesome
 #houston:admin
 service-configuration
 
-materialize:materialize@=0.97.0
+materialize:materialize
 #afruth:chapp
 #check
 mrt:momentjs
