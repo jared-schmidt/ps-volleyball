@@ -10,11 +10,22 @@ Session.setDefault('records', {});
 
 
 Template.hello.helpers({
+    onSuccess: function () {
+        var id = this._id;
+        return function (res, val) {
+            Meteor.call('changeUserTitle', val, id, function(err, data){
+                if(err){
+                    console.error(err);
+                    Materialize.toast('Error!', 4000);
+                }
+                Materialize.toast('Changed title', 4000);
+            });
+        }
+    },
     dateFormat: function() {
         return moment(this.when).format('LL');
     },
     players: function() {
-        console.log(Meteor.users.find({}).fetch());
         return Meteor.users.find({}, {
             sort: {
                 'profile.wins': -1
@@ -22,52 +33,44 @@ Template.hello.helpers({
         }).fetch();
     },
     team1: function() {
-        console.log("getting team 1");
         var team = Team1.find({}).fetch();
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
             if (_.findWhere(team[0].team, {
                     _id: Meteor.userId()
                 })) {
             } else {
-                console.log("not home");
             }
-            console.log("found team 1");
             return {
                 'team': team[0].team,
                 'teamPercentage': team[0].teamPercentage,
                 'random': team[0].random
             };
         } else {
-            console.log("no team 1 found");
             return {
                 'team': [],
                 'teamPercentage': 0,
-                'random': team[0].random
+                'random': null
             };
         }
     },
     team2: function() {
-        console.log("getting team 2");
         var team = Team2.find({}).fetch();
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
             if (_.findWhere(team[0].team, {
                     _id: Meteor.userId()
                 })) {
             } else {
-                console.log("not away");
             }
-            console.log("found team 2");
             return {
                 'team': team[0].team,
                 'teamPercentage': team[0].teamPercentage,
                 'random': team[0].random
             };
         } else {
-            console.log("no team 2 found");
             return {
                 'team': [],
                 'teamPercentage': 0,
-                'random': team[0].random
+                'random': null
             };
         }
     },
@@ -81,11 +84,9 @@ Template.hello.helpers({
         return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
     },
     isActive: function() {
-        console.log("checking is active");
         return Meteor.user().profile.active;
     },
     stats: function() {
-        console.log(Meteor.users.find({}));
         return Meteor.users.find({});
     },
     pastTeams: function() {
@@ -94,7 +95,6 @@ Template.hello.helpers({
                 'when': 1
             }
         }).fetch();
-        console.log(pastGames);
         return pastGames;
     },
     records: function() {
@@ -195,11 +195,11 @@ Template.hello.events({
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeUserStatus', newValue, this._id);
     },
-    'change .input-field' : function(e){
-        e.preventDefault();
-        var newValue = $(e.target).val();
-        Meteor.call('changeUserTitle', newValue, this._id);
-    },
+    // 'change .input-field' : function(e){
+    //     e.preventDefault();
+    //     var newValue = $(e.target).val();
+    //     Meteor.call('changeUserTitle', newValue, this._id);
+    // },
     'click #teamsModal': function(e){
         e.preventDefault();
         $('#modal1').openModal();
