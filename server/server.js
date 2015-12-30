@@ -406,7 +406,7 @@ Meteor.methods({
 
         var pastGames = PastTeams.find({}, {
             sort: {
-                'created': -1
+                'when': 1
             }
         }).fetch();
 

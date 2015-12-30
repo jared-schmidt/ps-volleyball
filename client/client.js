@@ -230,7 +230,15 @@ Template.hello.events({
     },
     'click #fix': function(e) {
         e.preventDefault();
-        Meteor.call('fixTotalGamesPlayer');
+        Materialize.toast('Trying to fix!', 2000);
+        Meteor.call('fixTotalGamesPlayer', function(err, data){
+            if (err){
+                Materialize.toast('Error fixing', 4000);
+                console.error(err);
+            } else {
+                Materialize.toast('Should be fixed!', 4000);
+            }
+        });
     },
     'click #pastTeamsBtn': function(e) {
         e.preventDefault();
