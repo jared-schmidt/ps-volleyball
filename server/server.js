@@ -312,6 +312,67 @@ Meteor.methods({
 
 
     },
+    createTeamsOptimized: function(){
+        var allActivePlayers = Meteor.users.find({
+            'profile.active': true,
+        },{
+            'sort': {
+                'profile.winningStreak': -1,
+                'profile.winPercentage': -1
+            }
+        }).fetch();
+
+        var team1 = [];
+        var team2 = [];
+
+        _.each(allActivePlayers, function(player, index){
+            if (isOdd(index)){
+                team1.push(player);
+            } else {
+                team2.push(player);
+            }
+        });
+
+
+
+        var count = 0;
+        var team1Percentage = 0.0;
+        var team2Percentage = 0.0;
+        _.each(team1, function(player) {
+            count += 1;
+            team1Percentage += parseFloat(player.profile.winPercentage);
+        });
+        team1Percentage = parseFloat(team1Percentage) / parseInt(count);
+
+        count = 0;
+        _.each(team2, function(player) {
+            count += 1;
+            team2Percentage += parseFloat(player.profile.winPercentage);
+        });
+        team2Percentage = parseFloat(team2Percentage) / parseInt(count);
+        if (team1.length > 1 && team2.length > 1) {
+            if (isAdmin()) {
+                Team1.remove({});
+                Team1.insert({
+                    'team': team1,
+                    'teamPercentage': team1Percentage.toFixed(3),
+                    'created': new Date(),
+                    'random': true
+                });
+
+                Team2.remove({});
+                Team2.insert({
+                    'team': team2,
+                    'teamPercentage': team2Percentage.toFixed(3),
+                    'created': new Date(),
+                    'random': true
+                });
+            }
+        }
+
+
+
+    },
     markTeam1Win: function() {
         if (isAdmin()) {
             var team = Team1.findOne({});

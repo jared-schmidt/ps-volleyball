@@ -218,6 +218,16 @@ Template.hello.events({
             Materialize.toast('Need to be an admin', 4000);
         }
     },
+    'click #createTeamsOptimized': function(e){
+        e.preventDefault();
+        if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
+            Meteor.call('createTeamsOptimized', function(){
+                Materialize.toast('Created Optimized Teams!', 4000);
+            });
+        } else {
+            Materialize.toast('Need to be an admin', 4000);
+        }
+    },
     'click #team1Win': function(e) {
         e.preventDefault();
         Meteor.call('markTeam1Win');
