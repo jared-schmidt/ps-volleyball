@@ -19,7 +19,6 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 autopublish             # Publish all data to the clients (for prototyping)
 #insecure                # Allow all DB writes from clients (for prototyping)
 
-twbs:bootstrap
 accounts-google
 #ian:accounts-ui-bootstrap-3
 accounts-ui
@@ -37,5 +36,5 @@ digilord:faker
 #accounts-password
 useraccounts:materialize
 alanning:roles
-natestrauser:x-editable-bootstrap
+#natestrauser:x-editable-bootstrap
 workman:x-editable-reactive-template
