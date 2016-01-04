@@ -379,7 +379,7 @@ Meteor.methods({
     markTeam1Win: function() {
         if (isAdmin()) {
             var team = Team1.findOne({});
-            if (team && team.team.length > 1) {
+            if (team && team.team.length > 0) {
                 _.each(team.team, function(player) {
                     Meteor.users.update({
                         '_id': player._id
@@ -406,7 +406,7 @@ Meteor.methods({
     markTeam2Win: function() {
         if (isAdmin()) {
             var team = Team2.findOne({});
-            if (team && team.team.length > 1) {
+            if (team && team.team.length > 0) {
                 _.each(team.team, function(player) {
                     Meteor.users.update({
                         '_id': player._id
