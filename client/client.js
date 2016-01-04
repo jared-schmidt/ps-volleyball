@@ -211,8 +211,13 @@ Template.hello.events({
     'click #createTeams': function(e) {
         e.preventDefault();
         if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
-            Meteor.call('createTeams', function(){
-                Materialize.toast('Created Teams!', 4000);
+            Meteor.call('createTeams', function(err, message){
+                if (err){
+                    Materialize.toast('error', 4000);
+                    console.error(err);
+                } else {
+                    Materialize.toast(message, 4000);
+                }
             });
         } else {
             Materialize.toast('Need to be an admin', 4000);
@@ -221,8 +226,13 @@ Template.hello.events({
     'click #createTeamsOptimized': function(e){
         e.preventDefault();
         if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
-            Meteor.call('createTeamsOptimized', function(){
-                Materialize.toast('Created Optimized Teams!', 4000);
+            Meteor.call('createTeamsOptimized', function(err,message){
+                if (err){
+                    Materialize.toast('error', 4000);
+                    console.error(err);
+                } else {
+                    Materialize.toast(message, 4000);
+                }
             });
         } else {
             Materialize.toast('Need to be an admin', 4000);

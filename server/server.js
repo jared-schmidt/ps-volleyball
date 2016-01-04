@@ -290,7 +290,7 @@ Meteor.methods({
             team2Percentage += parseFloat(player.profile.winPercentage);
         });
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
-        if (team1.length > 1 && team2.length > 1) {
+        if (team1.length > 0 && team2.length > 0) {
             if (isAdmin()) {
                 Team1.remove({});
                 Team1.insert({
@@ -308,8 +308,10 @@ Meteor.methods({
                     'random': true
                 });
             }
+            return "Created Teams";
+        } else {
+            return "Not enough people to create team";
         }
-
 
     },
     createTeamsOptimized: function(){
@@ -333,8 +335,6 @@ Meteor.methods({
             }
         });
 
-
-
         var count = 0;
         var team1Percentage = 0.0;
         var team2Percentage = 0.0;
@@ -350,7 +350,7 @@ Meteor.methods({
             team2Percentage += parseFloat(player.profile.winPercentage);
         });
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
-        if (team1.length > 1 && team2.length > 1) {
+        if (team1.length > 0 && team2.length > 0) {
             if (isAdmin()) {
                 Team1.remove({});
                 Team1.insert({
@@ -368,6 +368,9 @@ Meteor.methods({
                     'random': true
                 });
             }
+            return "Created Optimized Teams!";
+        } else {
+            return "Not enough people to create team";
         }
 
 
