@@ -82,6 +82,14 @@ function playerExists(team, playerId) {
 }
 
 Meteor.methods({
+    clearTeam1: function(){
+        Team1.remove({});
+        return true;
+    },
+    clearTeam2: function(){
+        Team2.remove({});
+        return true;
+    },
     log: function(did){
         Logs.insert({
             'user': Meteor.user()._id,
@@ -315,12 +323,21 @@ Meteor.methods({
 
     },
     createTeamsOptimized: function(){
+        // var allActivePlayers = Meteor.users.find({
+        //     'profile.active': true,
+        // },{
+        //     'sort': {
+        //         'profile.winningStreak': -1,
+        //         'profile.winPercentage': -1
+        //     }
+        // }).fetch();
+
         var allActivePlayers = Meteor.users.find({
             'profile.active': true,
         },{
             'sort': {
+                'profile.winPercentage': -1,
                 'profile.winningStreak': -1,
-                'profile.winPercentage': -1
             }
         }).fetch();
 
