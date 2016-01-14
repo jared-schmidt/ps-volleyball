@@ -1,7 +1,7 @@
 Meteor.startup(function() {
     // code to run on server at startup
-    // if (Meteor.users.find().count() < 25) {
-    //     _.each(_.range(25), function() {
+    // if (Meteor.users.find().count() < 5) {
+    //     _.each(_.range(5), function() {
     //         var randomEmail = faker.internet.email();
     //         var randomName = faker.name.findName();
     //         var userName = faker.internet.userName();
@@ -9,7 +9,8 @@ Meteor.startup(function() {
     //             username: userName,
     //             profile: {
     //                 name: randomName,
-    //                 active: true
+    //                 active: true,
+    //                 retired: false,
     //             },
     //             email: randomEmail,
     //             password: 'password'
@@ -82,6 +83,17 @@ function playerExists(team, playerId) {
 }
 
 Meteor.methods({
+    retire: function(userId){
+        Meteor.users.update({
+            '_id': userId
+        }, {
+            $set: {
+                'profile.retired': true,
+                'profile.active': false
+            }
+        });
+        return true;
+    },
     clearTeam1: function(){
         Team1.remove({});
         return true;
@@ -257,7 +269,8 @@ Meteor.methods({
     },
     createTeams: function() {
         var allActivePlayers = Meteor.users.find({
-            'profile.active': true
+            'profile.active': true,
+            'profile.retired': false
         }).fetch();
 
         var mixed = _.shuffle(allActivePlayers);
@@ -334,6 +347,7 @@ Meteor.methods({
 
         var allActivePlayers = Meteor.users.find({
             'profile.active': true,
+            'profile.retired': false
         },{
             'sort': {
                 'profile.winPercentage': -1,

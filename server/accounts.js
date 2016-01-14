@@ -55,6 +55,7 @@ Accounts.onCreateUser(function(options, user){
         user.profile.wins = 0;
         user.profile.loses = 0;
         user.profile.winPercentage = 0;
+        user.profile.retired = false;
 
         user.profile.title = 'New Person';
 

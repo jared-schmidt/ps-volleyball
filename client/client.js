@@ -26,9 +26,20 @@ Template.hello.helpers({
         return moment(this.when).format('LL');
     },
     players: function() {
-        return Meteor.users.find({}, {
+        return Meteor.users.find({
+            'profile.retired': false
+        }, {
             sort: {
-                'profile.wins': -1
+                'profile.name': -1
+            }
+        }).fetch();
+    },
+    retiredPlayers: function(){
+        return Meteor.users.find({
+            'profile.retired': true
+        }, {
+            sort: {
+                'profile.name': -1,
             }
         }).fetch();
     },
@@ -175,6 +186,21 @@ Template.hello.events({
 
             if (status){
                 Materialize.toast('Added to Home!', 4000);
+            } else {
+                Materialize.toast('Did nothing...', 4000);
+            }
+        });
+    },
+    'click #retire' : function(e){
+        e.preventDefault();
+        Meteor.call('retire', this._id, function(err, status){
+            if (err){
+                Materialize.toast('Error!', 4000);
+                console.error(err);
+            }
+
+            if (status){
+                Materialize.toast('Retired!', 4000);
             } else {
                 Materialize.toast('Did nothing...', 4000);
             }
