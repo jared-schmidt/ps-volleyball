@@ -30,7 +30,7 @@ Meteor.startup(function() {
             if (usersName === 'Jared Schmidt') {
                 Roles.addUsersToRoles(user._id, superAdmin, 'default-group');
                 console.log("Making " + user.profile.name + ' a ' + superAdmin);
-            } else if (usersName === 'Chris Scott' || usersName === 'Jonathan Savage' || usersName === 'Peter Kohlway') {
+            } else if (usersName === 'Chris Scott' || usersName === 'Jonathan Savage' || usersName === 'Peter Kohlway' || usersName === 'Lou Wolford') {
                 Roles.addUsersToRoles(user._id, admin, 'default-group');
                 console.log("Making " + user.profile.name + ' a ' + admin);
             } else {
