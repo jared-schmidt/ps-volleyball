@@ -98,7 +98,13 @@ Template.hello.helpers({
         return Meteor.user().profile.active;
     },
     stats: function() {
-        return Meteor.users.find({});
+        return Meteor.users.find({
+            'profile.retired': false
+        }, {
+            sort: {
+                'profile.name': -1
+            }
+        }).fetch();
     },
     pastTeams: function() {
         var pastGames = PastTeams.find({}, {

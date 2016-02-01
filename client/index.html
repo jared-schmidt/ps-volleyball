@@ -35,7 +35,7 @@
           </div>
         {{/if}}
     </div>
-
+    {{> meteorStatus}}
 </body>
 
 
@@ -179,7 +179,7 @@
                                 <tr>
                                     <td><img height="32" width="32" src="{{services.google.picture}}" /></td>
                                     {{#if isAdmin}}
-                                    <td><a href='#' id='retire'>Retire</a></td>
+                                    <td><a href='#' id='retire'>Retire</a>{{profile.retired}}</td>
                                     <td><a href='#' id='makeHome'>Home</a> | <a id='makeAway' href='#'>Away</a></td>
                                     {{/if}}
                                     <td>{{profile.name}}</td>
