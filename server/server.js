@@ -358,13 +358,24 @@ Meteor.methods({
         var team1 = [];
         var team2 = [];
 
-        _.each(allActivePlayers, function(player, index){
+        // Put best and worst player on the same team
+        team1.push(allActivePlayers.shift());
+        team1.push(allActivePlayers.pop());
+        
+        // Alternate the rest of the players
+        _.each(allActivePlayers, function(player, index){            
             if (isOdd(index)){
                 team1.push(player);
             } else {
                 team2.push(player);
             }
         });
+
+        // If even teams, team1 will get extra mid range player...send to team 2
+        // Team1 will always have one extra player if odd number of players
+        if (team1.length()-team2.length() == 2 ){
+            team2.push(team1.pop());
+        }
 
         var count = 0;
         var team1Percentage = 0.0;
