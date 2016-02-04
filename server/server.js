@@ -379,12 +379,6 @@ Meteor.methods({
             }
         });
 
-        // If even teams, team1 will get extra mid range player...send to team 2
-        // Team1 will always have one extra player if odd number of players
-        if (team1.length-team2.length == 2 ){
-            team2.push(team1.pop());
-        }
-
         var count = 0;
         var team1Percentage = 0.0;
         var team2Percentage = 0.0;
@@ -402,21 +396,37 @@ Meteor.methods({
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
         if (team1.length > 0 && team2.length > 0) {
             if (isAdmin()) {
-                Team1.remove({});
-                Team1.insert({
-                    'team': team1,
-                    'teamPercentage': team1Percentage.toFixed(3),
-                    'created': new Date(),
-                    'random': true
-                });
-
-                Team2.remove({});
-                Team2.insert({
-                    'team': team2,
-                    'teamPercentage': team2Percentage.toFixed(3),
-                    'created': new Date(),
-                    'random': true
-                });
+                if (isOdd(Math.floor(Math.random() * 2) + 1)){
+                    Team1.remove({});
+                    Team1.insert({
+                        'team': team1,
+                        'teamPercentage': team1Percentage.toFixed(3),
+                        'created': new Date(),
+                        'random': true
+                    });
+                    Team2.remove({});
+                    Team2.insert({
+                        'team': team2,
+                        'teamPercentage': team2Percentage.toFixed(3),
+                        'created': new Date(),
+                        'random': true
+                    });                    
+                } else{
+                    Team1.remove({});
+                    Team1.insert({
+                        'team': team2,
+                        'teamPercentage': team2Percentage.toFixed(3),
+                        'created': new Date(),
+                        'random': true
+                    });
+                    Team2.remove({});
+                    Team2.insert({
+                        'team': team1,
+                        'teamPercentage': team1Percentage.toFixed(3),
+                        'created': new Date(),
+                        'random': true
+                    });                    
+                }
             }
             return "Created Optimized Teams!";
         } else {
