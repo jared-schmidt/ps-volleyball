@@ -362,8 +362,16 @@ Meteor.methods({
         team1.push(allActivePlayers.shift());
         team1.push(allActivePlayers.pop());
         
+        // If more than 2 players remaining, put second best and second worst on same team
+        // If there is only one player left it will skip this and put them on team 2
+        if (allActivePlayers.length > 1){
+            team2.push(allActivePlayers.shift());
+            team2.push(allActivePlayers.pop());
+        }
+
+        var shuffledPlayers = _.shuffle(allActivePlayers);
         // Alternate the rest of the players
-        _.each(allActivePlayers, function(player, index){            
+        _.each(shuffledPlayers, function(player, index){
             if (isOdd(index)){
                 team1.push(player);
             } else {
@@ -373,7 +381,7 @@ Meteor.methods({
 
         // If even teams, team1 will get extra mid range player...send to team 2
         // Team1 will always have one extra player if odd number of players
-        if (team1.length()-team2.length() == 2 ){
+        if (team1.length-team2.length == 2 ){
             team2.push(team1.pop());
         }
 
