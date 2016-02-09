@@ -352,6 +352,7 @@ Meteor.methods({
             'sort': {
                 'profile.winPercentage': -1,
                 'profile.winningStreak': -1,
+                'profile.losingStreak': 1
             }
         }).fetch();
 
@@ -370,14 +371,36 @@ Meteor.methods({
         }
 
         var shuffledPlayers = _.shuffle(allActivePlayers);
-        // Alternate the rest of the players
-        _.each(shuffledPlayers, function(player, index){
-            if (isOdd(index)){
-                team1.push(player);
-            } else {
-                team2.push(player);
+        // Alternate the rest of the players if even number are left
+        if (! isOdd(shuffledPlayers.length)){
+            _.each(shuffledPlayers, function(player, index){
+                if (isOdd(index)){
+                    team1.push(player);
+                } else {
+                    team2.push(player);
+                }
+            });            
+        }
+        else{
+            _.each(shuffledPlayers, function(player, index){
+                var randomNum = Math.floor((Math.random() * 10) + 1);
+                if (isOdd(randomNum)){
+                    team1.push(player);
+                }
+                else{
+                    team2.push(player);
+                }
+            });
+
+            // In case random number unbalances teams
+            while(team1.length - team2.length > 1){
+                team2.push(team1.pop());
             }
-        });
+            while(team2.length - team1.length > 1){
+                team1.push(team2.pop());
+            }
+        }
+
 
         var count = 0;
         var team1Percentage = 0.0;
