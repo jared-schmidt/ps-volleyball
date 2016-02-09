@@ -352,6 +352,7 @@ Meteor.methods({
             'sort': {
                 'profile.winPercentage': -1,
                 'profile.winningStreak': -1,
+                'profile.losingStreak': 1
             }
         }).fetch();
 
