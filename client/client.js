@@ -10,11 +10,54 @@ Session.setDefault('records', {});
 
 
 Template.hello.helpers({
-    onSuccess: function () {
+    settings: function() {
+        return {
+            rowsPerPage: 10,
+            showFilter: false,
+            showNavigationRowsPerPage: false,
+            showRowCount: false,
+            showNavigation: 'auto',
+            fields: [
+                {
+                    key: 'profile.name',
+                    label: 'Name'
+                },
+                {
+                    key: 'profile.wins',
+                    label: 'Wins'
+                },
+                {
+                    key: 'profile.loses',
+                    label: 'Loses'
+                },
+                {
+                    key: 'profile.winPercentage',
+                    label: 'Win %'
+                },
+                {
+                    key: 'profile.winningStreak',
+                    label: 'Winning Streak'
+                },
+                {
+                    key: 'profile.losingStreak',
+                    label: 'Losing Streak'
+                },
+                {
+                    key: 'profile.playingStreak',
+                    label: 'Playing Streak'
+                },
+                {
+                    key: 'profile.total',
+                    label: 'Total Games'
+                }
+            ]
+        };
+    },
+    onSuccess: function() {
         var id = this._id;
-        return function (res, val) {
-            Meteor.call('changeUserTitle', val, id, function(err, data){
-                if(err){
+        return function(res, val) {
+            Meteor.call('changeUserTitle', val, id, function(err, data) {
+                if (err) {
                     console.error(err);
                     Materialize.toast('Error!', 4000);
                 }
@@ -34,7 +77,7 @@ Template.hello.helpers({
             }
         }).fetch();
     },
-    retiredPlayers: function(){
+    retiredPlayers: function() {
         return Meteor.users.find({
             'profile.retired': true
         }, {
@@ -48,9 +91,7 @@ Template.hello.helpers({
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
             if (_.findWhere(team[0].team, {
                     _id: Meteor.userId()
-                })) {
-            } else {
-            }
+                })) {} else {}
             return {
                 'team': team[0].team,
                 'teamPercentage': team[0].teamPercentage,
@@ -69,9 +110,7 @@ Template.hello.helpers({
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
             if (_.findWhere(team[0].team, {
                     _id: Meteor.userId()
-                })) {
-            } else {
-            }
+                })) {} else {}
             return {
                 'team': team[0].team,
                 'teamPercentage': team[0].teamPercentage,
@@ -91,7 +130,7 @@ Template.hello.helpers({
     isAdmin: function() {
         return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
     },
-    isSuperAdmin: function(){
+    isSuperAdmin: function() {
         return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
     },
     isActive: function() {
@@ -139,13 +178,13 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-    'click #team1Clear': function(e){
-        Meteor.call('clearTeam1', function(err, status){
-            if (err){
+    'click #team1Clear': function(e) {
+        Meteor.call('clearTeam1', function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             } else {
-                if (status){
+                if (status) {
                     Materialize.toast('Clear Home Team!', 4000);
                 } else {
                     Materialize.toast('Did nothing...', 4000);
@@ -153,13 +192,13 @@ Template.hello.events({
             }
         });
     },
-    'click #team2Clear': function(e){
-        Meteor.call('clearTeam2', function(err, status){
-            if (err){
+    'click #team2Clear': function(e) {
+        Meteor.call('clearTeam2', function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             } else {
-                if (status){
+                if (status) {
                     Materialize.toast('Clear Away Team!', 4000);
                 } else {
                     Materialize.toast('Did nothing...', 4000);
@@ -167,45 +206,45 @@ Template.hello.events({
             }
         });
     },
-    'click #makeHome': function(e){
+    'click #makeHome': function(e) {
         e.preventDefault();
-        Meteor.call('addToHome', this._id, function(err, status){
-            if (err){
+        Meteor.call('addToHome', this._id, function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             }
 
-            if (status){
+            if (status) {
                 Materialize.toast('Added to Home!', 4000);
             } else {
                 Materialize.toast('Did nothing...', 4000);
             }
         });
     },
-    'click #makeAway': function(e){
+    'click #makeAway': function(e) {
         e.preventDefault();
-        Meteor.call('addToAway', this._id, function(err, status){
-            if (err){
+        Meteor.call('addToAway', this._id, function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             }
 
-            if (status){
+            if (status) {
                 Materialize.toast('Added to Home!', 4000);
             } else {
                 Materialize.toast('Did nothing...', 4000);
             }
         });
     },
-    'click #retire' : function(e){
+    'click #retire': function(e) {
         e.preventDefault();
-        Meteor.call('retire', this._id, function(err, status){
-            if (err){
+        Meteor.call('retire', this._id, function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             }
 
-            if (status){
+            if (status) {
                 Materialize.toast('Retired!', 4000);
             } else {
                 Materialize.toast('Did nothing...', 4000);
@@ -213,28 +252,31 @@ Template.hello.events({
         });
     },
     'click #removePlayer': function(e) {
-      e.preventDefault();
-      var teamId = $(e.currentTarget).attr("team-id");
-      Meteor.call('removePlayer', {'id': this._id, 'teamId': teamId}, function(err, status) {
-        if (err) {
-          Materialize.toast('Error!', 4000);
-        }
-        if (status) {
-          Materialize.toast('Player Removed!', 4000);
-        } else {
-          Materialize.toast('Shit if I number...', 4000);
-        }
-      });
-    },
-    'click #endSeason': function(e){
         e.preventDefault();
-        Meteor.call('endSeason', function(err, status){
-            if (err){
+        var teamId = $(e.currentTarget).attr("team-id");
+        Meteor.call('removePlayer', {
+            'id': this._id,
+            'teamId': teamId
+        }, function(err, status) {
+            if (err) {
+                Materialize.toast('Error!', 4000);
+            }
+            if (status) {
+                Materialize.toast('Player Removed!', 4000);
+            } else {
+                Materialize.toast('Shit if I number...', 4000);
+            }
+        });
+    },
+    'click #endSeason': function(e) {
+        e.preventDefault();
+        Meteor.call('endSeason', function(err, status) {
+            if (err) {
                 Materialize.toast('Error!', 4000);
                 console.error(err);
             }
 
-            if (status){
+            if (status) {
                 Materialize.toast('Cleared everything!', 4000);
             } else {
                 Materialize.toast('Did nothing...', 4000);
@@ -250,7 +292,7 @@ Template.hello.events({
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeStatus', newValue);
     },
-    'change .user-active-toggle' : function(e) {
+    'change .user-active-toggle': function(e) {
         e.preventDefault();
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeUserStatus', newValue, this._id);
@@ -260,19 +302,19 @@ Template.hello.events({
     //     var newValue = $(e.target).val();
     //     Meteor.call('changeUserTitle', newValue, this._id);
     // },
-    'click #teamsModal': function(e){
+    'click #teamsModal': function(e) {
         e.preventDefault();
         $('#modal1').openModal();
     },
-    'click #endSeasonModalBtn': function(e){
+    'click #endSeasonModalBtn': function(e) {
         e.preventDefault();
         $('#endSeasonModal').openModal();
     },
     'click #createTeams': function(e) {
         e.preventDefault();
         if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
-            Meteor.call('createTeams', function(err, message){
-                if (err){
+            Meteor.call('createTeams', function(err, message) {
+                if (err) {
                     Materialize.toast('error', 4000);
                     console.error(err);
                 } else {
@@ -283,11 +325,11 @@ Template.hello.events({
             Materialize.toast('Need to be an admin', 4000);
         }
     },
-    'click #createTeamsOptimized': function(e){
+    'click #createTeamsOptimized': function(e) {
         e.preventDefault();
         if (Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group')) {
-            Meteor.call('createTeamsOptimized', function(err,message){
-                if (err){
+            Meteor.call('createTeamsOptimized', function(err, message) {
+                if (err) {
                     Materialize.toast('error', 4000);
                     console.error(err);
                 } else {
@@ -311,8 +353,8 @@ Template.hello.events({
     'click #fix': function(e) {
         e.preventDefault();
         Materialize.toast('Trying to fix!', 2000);
-        Meteor.call('fixTotalGamesPlayer', function(err, data){
-            if (err){
+        Meteor.call('fixTotalGamesPlayer', function(err, data) {
+            if (err) {
                 Materialize.toast('Error fixing', 4000);
                 console.error(err);
             } else {
