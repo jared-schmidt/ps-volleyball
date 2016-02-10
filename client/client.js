@@ -14,13 +14,14 @@ Template.hello.rendered = function(){
         console.info('Action:', e.action);
         console.info('Text:', e.text);
         console.info('Trigger:', e.trigger);
-
+        Materialize.toast('Copied to clipboard!', 4000);
         e.clearSelection();
     });
 
     clipboard.on('error', function(e) {
         console.error('Action:', e.action);
         console.error('Trigger:', e.trigger);
+        Materialize.toast('Error coping!', 4000);
     });
 }
 
