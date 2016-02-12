@@ -46,6 +46,8 @@ function isOdd(num) {
     return num % 2;
 }
 
+function elo(w, l, avg, c){return (w + c * avg)/(w + l + c)}
+
 Meteor.publish('userData', function() {
     if (!this.userId) return null;
     return Meteor.users.find(this.userId, {
@@ -637,33 +639,13 @@ Meteor.methods({
                 }
                 if (found) {
                     found.winPercentage = (found.win / found.total).toFixed(3);
-                    winTotal += parseFloat(found.winPercentage);
+                    if (found.total > 0){
+                        winTotal += parseFloat(found.winPercentage);
+                    }
                 }
             });
 
         });
-
-        var avgWin = parseFloat(winTotal / allPlayers.length);
-        var constant = 10;
-        _.each(allPlayers, function(player) {
-            // (Wins + constant * Average Win % of all players) / (Wins + Losses + constant)
-            var wins = parseInt(player.profile.wins);
-            var loses = parseInt(player.profile.loses);
-            var elo = (wins + constant * avgWin) / (wins + loses + constant);
-            if (elo){
-                console.log(player.profile.name + ' = ' + elo);
-
-                Meteor.users.update({
-                    '_id': player._id
-                }, {
-                    $set: {
-                        elo: elo
-                    }
-                });
-            }
-        });
-
-
 
         var highestPlayingStreak = multiplemax(playerCount, 'playingStreak');
         var highestLosingStreak = multiplemax(playerCount, 'losingStreak');
@@ -780,6 +762,35 @@ Meteor.methods({
                 }
             });
         });
+
+
+        var allPlayersWhoPlayed = Meteor.users.find({'profile.total': {$gt: 0}}).fetch();
+
+        console.log('winTotal = ', winTotal);
+        console.log('peeps = ', allPlayersWhoPlayed.length);
+        var avgWin = parseFloat(winTotal / allPlayersWhoPlayed.length);
+        console.log("Avg Win = ", avgWin);
+
+        var constant = 10;
+        _.each(allPlayersWhoPlayed, function(player) {
+            // (Wins + constant * Average Win % of all players) / (Wins + Losses + constant)
+            var wins = parseInt(player.profile.wins);
+            var loses = parseInt(player.profile.loses);
+            var elo = (wins + constant * avgWin) / (wins + loses + constant);
+            if (elo){
+                console.log(player.profile.name + ' = ' + elo);
+
+                Meteor.users.update({
+                    '_id': player._id
+                }, {
+                    $set: {
+                        elo: elo
+                    }
+                });
+            }
+        });
+
+
         return {
             players: playerCount,
             newHigh: newHigh,
