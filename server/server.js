@@ -651,7 +651,7 @@ Meteor.methods({
             var loses = parseInt(player.profile.loses);
             var elo = (wins + constant * avgWin) / (wins + loses + constant);
             if (elo){
-                console.log(elo);
+                console.log(player.profile.name + ' = ' + elo);
 
                 Meteor.users.update({
                     '_id': player._id
