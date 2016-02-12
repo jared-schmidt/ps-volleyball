@@ -55,6 +55,11 @@ Template.hello.helpers({
                     label: 'Elo'
                 },
                 {
+
+                    key: 'profile.points',
+                    label: 'Points'
+                },
+                {
                     key: 'profile.winningStreak',
                     label: 'Winning Streak'
                 },

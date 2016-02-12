@@ -59,6 +59,7 @@ Accounts.onCreateUser(function(options, user){
 
         user.profile.title = 'New Person';
         user.profile.elo = 0.000;
+        user.profile.points = 0;
     }
     return user;
 });
