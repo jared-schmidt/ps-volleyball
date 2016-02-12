@@ -54,11 +54,11 @@ Accounts.onCreateUser(function(options, user){
         user.profile.playingStreak = 0;
         user.profile.wins = 0;
         user.profile.loses = 0;
-        user.profile.winPercentage = 0;
+        user.profile.winPercentage = 0.00;
         user.profile.retired = false;
 
         user.profile.title = 'New Person';
-
+        user.profile.elo = 0.000;
     }
     return user;
 });

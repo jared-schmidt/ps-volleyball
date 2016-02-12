@@ -51,6 +51,10 @@ Template.hello.helpers({
                     label: 'Win %'
                 },
                 {
+                    key: 'profile.elo',
+                    label: 'Elo'
+                },
+                {
                     key: 'profile.winningStreak',
                     label: 'Winning Streak'
                 },

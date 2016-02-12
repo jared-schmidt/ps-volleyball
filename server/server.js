@@ -561,8 +561,6 @@ Meteor.methods({
 
         var playerCount = [];
 
-        var winTotal = 0.0;
-
         _.each(pastGames, function(game) {
             var win = game.winningTeam.team;
             var lose = game.losingTeam.team;
@@ -639,9 +637,6 @@ Meteor.methods({
                 }
                 if (found) {
                     found.winPercentage = (found.win / found.total).toFixed(3);
-                    if (found.total > 0){
-                        winTotal += parseFloat(found.winPercentage);
-                    }
                 }
             });
 
@@ -765,11 +760,12 @@ Meteor.methods({
 
 
         var allPlayersWhoPlayed = Meteor.users.find({'profile.total': {$gt: 0}}).fetch();
+        var winTotal = 0.0;
+        _.each(allPlayersWhoPlayed, function(player){
+            winTotal += parseFloat(player.profile.winPercentage);
+        });
 
-        console.log('winTotal = ', winTotal);
-        console.log('peeps = ', allPlayersWhoPlayed.length);
         var avgWin = parseFloat(winTotal / allPlayersWhoPlayed.length);
-        console.log("Avg Win = ", avgWin);
 
         var constant = 10;
         _.each(allPlayersWhoPlayed, function(player) {
@@ -778,13 +774,11 @@ Meteor.methods({
             var loses = parseInt(player.profile.loses);
             var elo = (wins + constant * avgWin) / (wins + loses + constant);
             if (elo){
-                console.log(player.profile.name + ' = ' + elo);
-
                 Meteor.users.update({
                     '_id': player._id
                 }, {
                     $set: {
-                        elo: elo
+                        'profile.elo': elo.toFixed(3)
                     }
                 });
             }
