@@ -362,7 +362,7 @@ Meteor.methods({
         // Put best and worst player on the same team
         team1.push(allActivePlayers.shift());
         team1.push(allActivePlayers.pop());
-        
+
         // If more than 2 players remaining, put second best and second worst on same team
         // If there is only one player left it will skip this and put them on team 2
         if (allActivePlayers.length > 1){
@@ -379,7 +379,7 @@ Meteor.methods({
                 } else {
                     team2.push(player);
                 }
-            });            
+            });
         }
         else{
             _.each(shuffledPlayers, function(player, index){
@@ -433,7 +433,7 @@ Meteor.methods({
                         'teamPercentage': team2Percentage.toFixed(3),
                         'created': new Date(),
                         'random': true
-                    });                    
+                    });
                 } else{
                     Team1.remove({});
                     Team1.insert({
@@ -448,7 +448,7 @@ Meteor.methods({
                         'teamPercentage': team1Percentage.toFixed(3),
                         'created': new Date(),
                         'random': true
-                    });                    
+                    });
                 }
             }
             return "Created Optimized Teams!";
@@ -559,6 +559,8 @@ Meteor.methods({
 
         var playerCount = [];
 
+        var winTotal = 0.0;
+
         _.each(pastGames, function(game) {
             var win = game.winningTeam.team;
             var lose = game.losingTeam.team;
@@ -635,10 +637,33 @@ Meteor.methods({
                 }
                 if (found) {
                     found.winPercentage = (found.win / found.total).toFixed(3);
+                    winTotal += parseFloat(found.winPercentage);
                 }
             });
 
         });
+
+        var avgWin = parseFloat(winTotal / allPlayers.length);
+        var constant = 10;
+        _.each(allPlayers, function(player) {
+            // (Wins + constant * Average Win % of all players) / (Wins + Losses + constant)
+            var wins = parseInt(player.profile.wins);
+            var loses = parseInt(player.profile.loses);
+            var elo = (wins + constant * avgWin) / (wins + loses + constant);
+            if (elo){
+                console.log(elo);
+
+                Meteor.users.update({
+                    '_id': player._id
+                }, {
+                    $set: {
+                        elo: elo
+                    }
+                });
+            }
+        });
+
+
 
         var highestPlayingStreak = multiplemax(playerCount, 'playingStreak');
         var highestLosingStreak = multiplemax(playerCount, 'losingStreak');
