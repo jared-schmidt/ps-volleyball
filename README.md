@@ -1,3 +1,3 @@
 # ps-volleyball
 
-Site: ps-volleyball.meteor.com
+Site: ps-volleyball.herokuapp.com
