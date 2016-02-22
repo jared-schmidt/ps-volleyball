@@ -28,7 +28,7 @@ Template.hello.rendered = function(){
 Template.hello.helpers({
     settings: function() {
         return {
-            rowsPerPage: 10,
+            rowsPerPage: 15,
             showFilter: false,
             showNavigationRowsPerPage: false,
             showRowCount: false,
@@ -48,7 +48,17 @@ Template.hello.helpers({
                 },
                 {
                     key: 'profile.winPercentage',
-                    label: 'Win %'
+                    label: 'Win %',
+                    sortOrder: 1, sortDirection: 'desc'
+                },
+                {
+                    key: 'profile.elo',
+                    label: 'Elo'
+                },
+                {
+
+                    key: 'profile.points',
+                    label: 'Points'
                 },
                 {
                     key: 'profile.winningStreak',

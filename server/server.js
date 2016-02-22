@@ -46,6 +46,8 @@ function isOdd(num) {
     return num % 2;
 }
 
+function elo(w, l, avg, c){return (w + c * avg)/(w + l + c)}
+
 Meteor.publish('userData', function() {
     if (!this.userId) return null;
     return Meteor.users.find(this.userId, {
@@ -362,7 +364,7 @@ Meteor.methods({
         // Put best and worst player on the same team
         team1.push(allActivePlayers.shift());
         team1.push(allActivePlayers.pop());
-        
+
         // If more than 2 players remaining, put second best and second worst on same team
         // If there is only one player left it will skip this and put them on team 2
         if (allActivePlayers.length > 1){
@@ -379,7 +381,7 @@ Meteor.methods({
                 } else {
                     team2.push(player);
                 }
-            });            
+            });
         }
         else{
             _.each(shuffledPlayers, function(player, index){
@@ -433,7 +435,7 @@ Meteor.methods({
                         'teamPercentage': team2Percentage.toFixed(3),
                         'created': new Date(),
                         'random': true
-                    });                    
+                    });
                 } else{
                     Team1.remove({});
                     Team1.insert({
@@ -448,7 +450,7 @@ Meteor.methods({
                         'teamPercentage': team1Percentage.toFixed(3),
                         'created': new Date(),
                         'random': true
-                    });                    
+                    });
                 }
             }
             return "Created Optimized Teams!";
@@ -559,6 +561,9 @@ Meteor.methods({
 
         var playerCount = [];
 
+        var winPoints = 3;
+        var losePoints = 1;
+
         _.each(pastGames, function(game) {
             var win = game.winningTeam.team;
             var lose = game.losingTeam.team;
@@ -573,6 +578,7 @@ Meteor.methods({
                     found.winningStreak += 1;
                     found.losingStreak = 0;
                     // found.playingStreak += 1;
+                    found.points += winPoints;
                 } else {
                     playerCount.push({
                         _id: player._id,
@@ -582,7 +588,8 @@ Meteor.methods({
                         winningStreak: 1,
                         losingStreak: 0,
                         playingStreak: 0,
-                        total: 1
+                        total: 1,
+                        points: winPoints
                     });
                 }
             });
@@ -596,6 +603,7 @@ Meteor.methods({
                     found.lost += 1;
                     found.winningStreak = 0;
                     found.losingStreak += 1;
+                    found.points += losePoints;
                 } else {
                     playerCount.push({
                         _id: player._id,
@@ -605,7 +613,8 @@ Meteor.methods({
                         winningStreak: 0,
                         losingStreak: 1,
                         playingStreak: 0,
-                        total: 1
+                        total: 1,
+                        points: losePoints
                     });
                 }
             });
@@ -751,10 +760,44 @@ Meteor.methods({
                     'profile.playingStreak': player.playingStreak,
                     'profile.wins': player.win,
                     'profile.loses': player.lost,
-                    'profile.winPercentage': player.winPercentage
+                    'profile.winPercentage': player.winPercentage,
+                    'profile.points': player.points
                 }
             });
         });
+
+
+        var allPlayersWhoPlayed = Meteor.users.find({'profile.total': {$gt: 0}}).fetch();
+        var winTotal = 0.0;
+        _.each(allPlayersWhoPlayed, function(player){
+            winTotal += parseFloat(player.profile.winPercentage);
+        });
+
+        var avgWin = parseFloat(winTotal / allPlayersWhoPlayed.length);
+
+
+        _.each(allPlayersWhoPlayed, function(player) {
+            // (Wins + constant * Average Win % of all players) / (Wins + Losses + constant)
+            var wins = parseInt(player.profile.wins);
+            var loses = parseInt(player.profile.loses);
+            var constant = 25;
+            if (player.profile.total < 8){
+                constant = 5;
+            }
+            console.log(player.profile.name + ' = ' + constant);
+            var elo = (wins + constant * avgWin) / (wins + loses + constant);
+            if (elo){
+                Meteor.users.update({
+                    '_id': player._id
+                }, {
+                    $set: {
+                        'profile.elo': elo.toFixed(3)
+                    }
+                });
+            }
+        });
+
+
         return {
             players: playerCount,
             newHigh: newHigh,
