@@ -26,20 +26,20 @@ if (isDevEnv()) {
 } else {
     console.log("ENV -> PRODUCTION");
 
-    if (Meteor.isCordova) {
+    // if (Meteor.isCordova) {
         ServiceConfiguration.configurations.insert({
             service: 'google',
             loginStyle: "redirect",
             clientId: '933385738461-jsshkdlvbgbr62gukk8qngrvhr6qdnc3.apps.googleusercontent.com',
             secret: 'K8lO8Q3DC3GkSbbBh4L5Dwla'
         });
-    } else {
-        ServiceConfiguration.configurations.insert({
-            service: 'google',
-            loginStyle: "popup",
-            clientId: '933385738461-jsshkdlvbgbr62gukk8qngrvhr6qdnc3.apps.googleusercontent.com',
-            secret: 'K8lO8Q3DC3GkSbbBh4L5Dwla'
-        });
+    // } else {
+        // ServiceConfiguration.configurations.insert({
+        //     service: 'google',
+        //     loginStyle: "popup",
+        //     clientId: '933385738461-jsshkdlvbgbr62gukk8qngrvhr6qdnc3.apps.googleusercontent.com',
+        //     secret: 'K8lO8Q3DC3GkSbbBh4L5Dwla'
+        // });
     }
 
 
