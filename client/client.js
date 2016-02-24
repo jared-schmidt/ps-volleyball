@@ -26,6 +26,9 @@ Template.hello.rendered = function(){
 }
 
 Template.hello.helpers({
+    isCordova: function(){
+        return Meteor.isCordova;
+    },
     settings: function() {
         return {
             rowsPerPage: 15,
