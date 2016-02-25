@@ -37,6 +37,12 @@
     {{> meteorStatus}}
 </body>
 <template name="hello">
+    is Cordova
+    {{#if isCordova}}
+        True
+    {{else}}
+        False
+    {{/if}}
     <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
