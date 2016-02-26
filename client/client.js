@@ -208,6 +208,18 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
+    'click #pastData': function(e){
+        Meteor.call('getPastTeamData', function(err, status){
+            if (err) {
+                Materialize.toast('Error!', 4000);
+                console.error(err);
+            } else {
+                if (status) {
+                    Materialize.toast('Fixed Past!', 4000);
+                }
+            }
+        });
+    },
     'click #team1Clear': function(e) {
         Meteor.call('clearTeam1', function(err, status) {
             if (err) {

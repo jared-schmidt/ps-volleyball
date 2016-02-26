@@ -85,6 +85,161 @@ function playerExists(team, playerId) {
 }
 
 Meteor.methods({
+    getPastTeamData: function(){
+        Meteor.users.update({}, {$unset: {'profile.past': []}}, {multi: true});
+        var seasons = PastSeasons.find().fetch();
+        _.each(seasons, function(season, index){
+
+            var allPlayers = Meteor.users.find().fetch();
+
+            var pastGames = _.sortBy(season.pastTeams, 'when');
+            var playerCount = [];
+
+            var winPoints = 3;
+            var losePoints = 1;
+
+            _.each(pastGames, function(game) {
+                var win = game.winningTeam.team;
+                var lose = game.losingTeam.team;
+
+                _.each(win, function(player) {
+                    var found = _.findWhere(playerCount, {
+                        _id: player._id
+                    });
+                    if (found) {
+                        found.total += 1;
+                        found.win += 1;
+                        found.winningStreak += 1;
+                        found.losingStreak = 0;
+                        // found.playingStreak += 1;
+                        found.points += winPoints;
+                    } else {
+                        playerCount.push({
+                            _id: player._id,
+                            name: player.profile.name,
+                            win: 1,
+                            lost: 0,
+                            winningStreak: 1,
+                            losingStreak: 0,
+                            playingStreak: 0,
+                            total: 1,
+                            points: winPoints
+                        });
+                    }
+                });
+
+                _.each(lose, function(player) {
+                    var found = _.findWhere(playerCount, {
+                        _id: player._id
+                    });
+                    if (found) {
+                        found.total += 1;
+                        found.lost += 1;
+                        found.winningStreak = 0;
+                        found.losingStreak += 1;
+                        found.points += losePoints;
+                    } else {
+                        playerCount.push({
+                            _id: player._id,
+                            name: player.profile.name,
+                            lost: 1,
+                            win: 0,
+                            winningStreak: 0,
+                            losingStreak: 1,
+                            playingStreak: 0,
+                            total: 1,
+                            points: losePoints
+                        });
+                    }
+                });
+
+                _.each(allPlayers, function(player) {
+                    var playerOnTeam = _.findWhere(win, {
+                        '_id': player._id
+                    });
+                    if (!playerOnTeam) {
+                        playerOnTeam = _.findWhere(lose, {
+                            '_id': player._id
+                        });
+                    }
+
+                    var found = _.findWhere(playerCount, {
+                        _id: player._id
+                    });
+                    if (playerOnTeam) {
+                        if (found) {
+                            found.playingStreak += 1;
+                        }
+                    } else {
+
+                        if (found) {
+                            found.playingStreak = 0;
+                        }
+                    }
+                    if (found) {
+                        found.winPercentage = (found.win / found.total).toFixed(3);
+                    }
+                });
+
+            });
+
+
+
+
+            _.each(playerCount, function(player) {
+                var stats = {
+                    'season': index,
+                    'winningStreak': player.winningStreak,
+                    'losingStreak': player.losingStreak,
+                    'total': player.total,
+                    'playingStreak': player.playingStreak,
+                    'wins': player.win,
+                    'loses': player.lost,
+                    'winPercentage': player.winPercentage,
+                    'points': player.points
+                }
+
+                Meteor.users.update({
+                    '_id': player._id,
+                }, {
+                    $addToSet: {'profile.past': stats}
+                });
+            });
+
+
+            // var allPlayersWhoPlayed = Meteor.users.find({'profile.total': {$gt: 0}}).fetch();
+            // var winTotal = 0.0;
+            // _.each(allPlayersWhoPlayed, function(player){
+            //     winTotal += parseFloat(player.profile.winPercentage);
+            // });
+
+            // var avgWin = parseFloat(winTotal / allPlayersWhoPlayed.length);
+
+
+            // _.each(allPlayersWhoPlayed, function(player) {
+            //     // (Wins + constant * Average Win % of all players) / (Wins + Losses + constant)
+            //     var wins = parseInt(player.profile.wins);
+            //     var loses = parseInt(player.profile.loses);
+            //     var constant = 25;
+            //     if (player.profile.total < 8){
+            //         constant = 5;
+            //     }
+            //     console.log(player.profile.name + ' = ' + constant);
+            //     var elo = (wins + constant * avgWin) / (wins + loses + constant);
+            //     if (elo){
+            //         Meteor.users.update({
+            //             '_id': player._id
+            //         }, {
+            //             $set: {
+            //                 'profile.elo': elo.toFixed(3)
+            //             }
+            //         });
+            //     }
+            // });
+        });
+
+        return PastSeasons.find().fetch();
+    },
     retire: function(userId){
         Meteor.users.update({
             '_id': userId
