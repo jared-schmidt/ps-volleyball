@@ -561,10 +561,13 @@ Meteor.methods({
 
         var count = 0;
         var team1Percentage = 0.0;
+        var team1Points = 0;
         var team2Percentage = 0.0;
+        var team2Points = 0;
         _.each(team1, function(player) {
             count += 1;
             team1Percentage += parseFloat(player.profile.winPercentage);
+            team1Points += parseInt(player.profile.points);
         });
         team1Percentage = parseFloat(team1Percentage) / parseInt(count);
 
@@ -572,7 +575,9 @@ Meteor.methods({
         _.each(team2, function(player) {
             count += 1;
             team2Percentage += parseFloat(player.profile.winPercentage);
+            team2Points += parseInt(player.profile.points);
         });
+        console.log(team2Points);
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
         if (team1.length > 0 && team2.length > 0) {
             if (isAdmin()) {
@@ -581,6 +586,7 @@ Meteor.methods({
                     Team1.insert({
                         'team': team1,
                         'teamPercentage': team1Percentage.toFixed(3),
+                        'points': team1Points,
                         'created': new Date(),
                         'random': true
                     });
@@ -588,6 +594,7 @@ Meteor.methods({
                     Team2.insert({
                         'team': team2,
                         'teamPercentage': team2Percentage.toFixed(3),
+                        'points': team2Points,
                         'created': new Date(),
                         'random': true
                     });
@@ -596,6 +603,7 @@ Meteor.methods({
                     Team1.insert({
                         'team': team2,
                         'teamPercentage': team2Percentage.toFixed(3),
+                        'points': team2Points,
                         'created': new Date(),
                         'random': true
                     });
@@ -603,6 +611,7 @@ Meteor.methods({
                     Team2.insert({
                         'team': team1,
                         'teamPercentage': team1Percentage.toFixed(3),
+                        'points': team1Points,
                         'created': new Date(),
                         'random': true
                     });

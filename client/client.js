@@ -27,7 +27,6 @@ Template.hello.rendered = function(){
 
 Template.hello.helpers({
     isCordova: function(){
-        console.log(Meteor.isCordova);
         return Meteor.isCordova;
     },
     settings: function() {
@@ -124,12 +123,14 @@ Template.hello.helpers({
                 })) {} else {}
             return {
                 'team': team[0].team,
+                'points': team[0].points,
                 'teamPercentage': team[0].teamPercentage,
                 'random': team[0].random
             };
         } else {
             return {
                 'team': [],
+                'points': 0,
                 'teamPercentage': 0,
                 'random': null
             };
@@ -143,12 +144,14 @@ Template.hello.helpers({
                 })) {} else {}
             return {
                 'team': team[0].team,
+                'points': team[0].points,
                 'teamPercentage': team[0].teamPercentage,
                 'random': team[0].random
             };
         } else {
             return {
                 'team': [],
+                'points': 0,
                 'teamPercentage': 0,
                 'random': null
             };
@@ -208,6 +211,10 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
+    'click #getPastData': function(e){
+        alert('LOOK IN JAVASCRIPT CONSOLE');
+        console.log(Meteor.users.find({}, {fields: {'profile.past': 1, 'profile.name': 1}}).fetch());
+    },
     'click #pastData': function(e){
         Meteor.call('getPastTeamData', function(err, status){
             if (err) {
