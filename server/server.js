@@ -706,7 +706,10 @@ Meteor.methods({
                         'profile.playingStreak': 0,
                         'profile.wins': 0,
                         'profile.loses': 0,
-                        'profile.winPercentage': 0
+                        'profile.winPercentage': 0.0,
+                        'profile.points': 0,
+                        'profile.elo': 0.0
+
                     }
                 });
             });
@@ -929,6 +932,25 @@ Meteor.methods({
                 }
             });
         });
+
+        if (playerCount.length <= 0){
+            _.each(Meteor.users.find().fetch(), function(player){
+                Meteor.users.update({'_id': player._id}, {
+                    $set: {
+                        'profile.winningStreak': 0,
+                        'profile.losingStreak': 0,
+                        'profile.total': 0,
+                        'profile.playingStreak': 0,
+                        'profile.wins': 0,
+                        'profile.loses': 0,
+                        'profile.winPercentage': 0.0,
+                        'profile.points': 0,
+                        'profile.elo': 0.0
+
+                    }
+                });
+            });
+        }
 
 
         var allPlayersWhoPlayed = Meteor.users.find({'profile.total': {$gt: 0}}).fetch();
