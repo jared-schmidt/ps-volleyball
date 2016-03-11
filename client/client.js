@@ -27,7 +27,8 @@ Template.hello.rendered = function(){
 
 Template.hello.helpers({
     isCordova: function(){
-        return Meteor.isCordova;
+        // return Meteor.isCordova;
+        return false;
     },
     settings: function() {
         return {
