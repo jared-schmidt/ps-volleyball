@@ -7,6 +7,7 @@ Session.setDefault('team2', []);
 Session.setDefault('stats', []);
 Session.setDefault('pastTeams', []);
 Session.setDefault('records', {});
+var clippyAgent;
 
 Template.hello.rendered = function(){
     var clipboard = new Clipboard('.btn-copy');
@@ -15,6 +16,8 @@ Template.hello.rendered = function(){
         console.info('Text:', e.text);
         console.info('Trigger:', e.trigger);
         Materialize.toast('Copied to clipboard!', 4000);
+        clippyAgent.speak('You copy that ' + Meteor.user().profile.given_name + '! Go You!');
+
         e.clearSelection();
     });
 
@@ -22,6 +25,14 @@ Template.hello.rendered = function(){
         console.error('Action:', e.action);
         console.error('Trigger:', e.trigger);
         Materialize.toast('Error coping!', 4000);
+    });
+
+    clippy.load('Clippy', function(agent){
+        // do anything with the loaded agent
+        clippyAgent = agent;
+        agent.show();
+        agent.speak('Hey ' + Meteor.user().profile.given_name + '!');
+        agent.animate();
     });
 }
 
@@ -215,6 +226,7 @@ Template.hello.events({
     'click #getPastData': function(e){
         alert('LOOK IN JAVASCRIPT CONSOLE');
         console.log(Meteor.users.find({}, {fields: {'profile.past': 1, 'profile.name': 1}}).fetch());
+        clippyAgent.speak('That is some past data!');
     },
     'click #pastData': function(e){
         Meteor.call('getPastTeamData', function(err, status){
@@ -394,11 +406,13 @@ Template.hello.events({
         e.preventDefault();
         Meteor.call('markTeam1Win');
         Materialize.toast('Home Team Won!', 4000);
+        clippyAgent.speak('Good job Home team!... Away team, you suck!');
     },
     'click #team2Win': function(e) {
         e.preventDefault();
         Meteor.call('markTeam2Win');
         Materialize.toast('Away Team Won!', 4000);
+        clippyAgent.speak('Good job Away team!... Home team, you suck!');
     },
     'click #fix': function(e) {
         e.preventDefault();
