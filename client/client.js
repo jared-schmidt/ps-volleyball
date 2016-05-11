@@ -31,6 +31,7 @@ Template.hello.rendered = function(){
         // do anything with the loaded agent
         clippyAgent = agent;
         agent.show();
+        agent.moveTo(100,100);
         agent.speak('Hey ' + Meteor.user().profile.given_name + '!');
         agent.animate();
     });
