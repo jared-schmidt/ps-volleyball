@@ -110,6 +110,12 @@ Template.hello.helpers({
     dateFormat: function() {
         return moment(this.when).format('LL');
     },
+    activePlayers: function(){
+        return Meteor.users.find({
+            'profile.retired': false,
+            'profile.active': true
+        }).count();
+    },
     players: function() {
         return Meteor.users.find({
             'profile.retired': false
