@@ -185,10 +185,8 @@
                                             {{#if isAdmin}}
                                                 <div class="switch">
                                                     <label>
-                                                        <span style="color: white">Inactive</span>
                                                         <input type="checkbox" class="user-active-toggle" checked= {{profile.active}} />
                                                         <span class="lever"></span>
-                                                        <span style="color: white">Active</span>
                                                     </label>
                                                 </div>
                                             {{else}}
@@ -212,35 +210,6 @@
         </div>
     {{/unless}}
 
-    <!-- Retired Players -->
-    {{#unless isCordova}}
-    <div class="row">
-        <div class="col s12 m12">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <span class="card-title">Retired Players</span>
-                    <table class="responsive-table">
-                        <thead>
-                            <th>Name</th>
-                            <th>Title</th>
-                        </thead>
-                        <tbody>
-                            {{#each retiredPlayers}}
-                                <tr>
-                                    <td>{{profile.name}}</td>
-                                    <td>
-                                        {{profile.title}}
-                                    </td>
-                                </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{/unless}}
-
     <!-- Stats -->
     {{#unless isCordova}}
         <div class="row" id='stats'>
@@ -256,6 +225,53 @@
             </div>
         </div>
     {{/unless}}
+
+    <!-- Records -->
+    <div class="row" id='recordsCard'>
+        <div class="col s12 m12">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Records</span>
+                    <table class="responsive-table">
+                        <thead>
+                            <th>&nbsp;</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Highest Playing Streak</td>
+                                <td>
+                                    {{records.playing.name}}
+                                </td>
+                                <td>
+                                    {{records.playing.score}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Highest Losing Streak</td>
+                                <td>
+                                    {{records.losing.name}}
+                                </td>
+                                <td>
+                                    {{records.losing.score}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Highest Winning Streak</td>
+                                <td>
+                                    {{records.winning.name}}
+                                </td>
+                                <td>
+                                    {{records.winning.score}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Past Teams -->
     {{#unless isCordova}}
@@ -300,51 +316,36 @@
                 </div>
             </div>
         </div>
-        <div class="row" id='recordsCard'>
-            <div class="col s12 m12">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
-                        <span class="card-title">Records</span>
-                        <table class="responsive-table">
-                            <thead>
-                                <th>&nbsp;</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                            </thead>
-                            <tbody>
+    {{/unless}}
+
+    <!-- Retired Players -->
+    {{#unless isCordova}}
+    <div class="row">
+        <div class="col s12 m12">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Retired Players</span>
+                    <table class="responsive-table">
+                        <thead>
+                            <th>Name</th>
+                            <th>Title</th>
+                        </thead>
+                        <tbody>
+                            {{#each retiredPlayers}}
                                 <tr>
-                                    <td>Highest Playing Streak</td>
+                                    <td>{{profile.name}}</td>
                                     <td>
-                                        {{records.playing.name}}
-                                    </td>
-                                    <td>
-                                        {{records.playing.score}}
+                                        {{profile.title}}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Highest Losing Streak</td>
-                                    <td>
-                                        {{records.losing.name}}
-                                    </td>
-                                    <td>
-                                        {{records.losing.score}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Highest Winning Streak</td>
-                                    <td>
-                                        {{records.winning.name}}
-                                    </td>
-                                    <td>
-                                        {{records.winning.score}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            {{/each}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
     {{/unless}}
+
 </template>
 
