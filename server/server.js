@@ -570,7 +570,7 @@ Meteor.methods({
             randomLastPlayer = allActivePlayers.pop();
         }
 
-        for (var i=0; i<=allActivePlayers.length-1; i++){
+        for (var i=0; i<=allActivePlayers.length-2; i++){
             if (i === 0){
                 team2.push(allActivePlayers[i]);
             } else {
