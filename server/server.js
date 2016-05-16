@@ -527,6 +527,7 @@ Meteor.methods({
             team2.push(allActivePlayers.pop());
         }
 
+        // -----------------------------------------------------------------------------------------
 
         // Lou's
         // var shuffledPlayers = _.shuffle(allActivePlayers);
@@ -560,45 +561,35 @@ Meteor.methods({
         //     }
         // }
 
+        // -----------------------------------------------------------------------------------------
 
         // Dave's
-        if (! isOdd(allActivePlayers.length)){
-            _.each(allActivePlayers, function(player, index){
-                if (index === 0){
-                    team2.push(player);
-                } else {
-
-                }
-
-                if (isOdd(index)){
-                    team1.push(player);
-                } else {
-                    team2.push(player);
-                }
-            });
+        var flipSide = false;
+        var randomLastPlayer = null;
+        if (isOdd(allActivePlayers.length)){
+            randomLastPlayer = allActivePlayers.pop();
         }
-        else{
-            var flipSide = false;
-            var randomLastPlayer = allActivePlayers.pop();
-            for (var i=0; i<=allActivePlayers.length-1; i++){
-                if (i === 0){
-                    team2.push(allActivePlayers[i]);
+
+        for (var i=0; i<=allActivePlayers.length-1; i++){
+            if (i === 0){
+                team2.push(allActivePlayers[i]);
+            } else {
+                if (!flipSide){
+                    team1.push(allActivePlayers[i]);
+                    if (allActivePlayers[i+1]){
+                        team1.push(allActivePlayers[i+1]);
+                    }
+                    flipSide = true;
                 } else {
-                    if (!flipSide){
-                        team1.push(allActivePlayers[i]);
-                        if (allActivePlayers[i+1]){
-                            team1.push(allActivePlayers[i+1]);
-                        }
-                        flipSide = true;
-                    } else {
-                        team2.push(allActivePlayers[i]);
-                        if (allActivePlayers[i+1]){
-                            team2.push(allActivePlayers[i+1]);
-                        }
+                    team2.push(allActivePlayers[i]);
+                    if (allActivePlayers[i+1]){
+                        team2.push(allActivePlayers[i+1]);
                     }
                 }
             }
+        }
 
+        if (randomLastPlayer){
             var randomNum = Math.floor((Math.random() * 10) + 1);
             if (isOdd(randomNum)){
                 team1.push(randomLastPlayer);
@@ -606,15 +597,8 @@ Meteor.methods({
             else{
                 team2.push(randomLastPlayer);
             }
-
-            // In case random number unbalances teams
-            while(team1.length - team2.length > 1){
-                team2.push(team1.pop());
-            }
-            while(team2.length - team1.length > 1){
-                team1.push(team2.pop());
-            }
         }
+        // -----------------------------------------------------------------------------------------
 
 
         var count = 0;
