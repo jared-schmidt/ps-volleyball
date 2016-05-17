@@ -596,7 +596,7 @@ Meteor.methods({
                 //if not empty yet give them another
                 if(allActivePlayers.length != 0)
                 {
-                    team2.push(allActivePlayers.pop());
+                    team2.push(allActivePlayers.shift());
                 }
                 team1Turn = true;
             }
