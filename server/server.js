@@ -530,74 +530,89 @@ Meteor.methods({
         // -----------------------------------------------------------------------------------------
 
         // Lou's
-        var shuffledPlayers = _.shuffle(allActivePlayers);
-        // Alternate the rest of the players if even number are left
-        if (! isOdd(shuffledPlayers.length)){
-            _.each(shuffledPlayers, function(player, index){
-                if (isOdd(index)){
-                    team1.push(player);
-                } else {
-                    team2.push(player);
-                }
-            });
-        }
-        else{
-            _.each(shuffledPlayers, function(player, index){
-                var randomNum = Math.floor((Math.random() * 10) + 1);
-                if (isOdd(randomNum)){
-                    team1.push(player);
-                }
-                else{
-                    team2.push(player);
-                }
-            });
+        // var shuffledPlayers = _.shuffle(allActivePlayers);
+        // // Alternate the rest of the players if even number are left
+        // if (! isOdd(shuffledPlayers.length)){
+        //     _.each(shuffledPlayers, function(player, index){
+        //         if (isOdd(index)){
+        //             team1.push(player);
+        //         } else {
+        //             team2.push(player);
+        //         }
+        //     });
+        // }
+        // else{
+        //     _.each(shuffledPlayers, function(player, index){
+        //         var randomNum = Math.floor((Math.random() * 10) + 1);
+        //         if (isOdd(randomNum)){
+        //             team1.push(player);
+        //         }
+        //         else{
+        //             team2.push(player);
+        //         }
+        //     });
 
-            // In case random number unbalances teams
+        //     // In case random number unbalances teams
+        //     while(team1.length - team2.length > 1){
+        //         team2.push(team1.pop());
+        //     }
+        //     while(team2.length - team1.length > 1){
+        //         team1.push(team2.pop());
+        //     }
+        // }
+
+        // -----------------------------------------------------------------------------------------
+
+        // Dave's
+        var flipSide = false;
+        var randomLastPlayer = null;
+        if (isOdd(allActivePlayers.length)){
+            randomLastPlayer = allActivePlayers.pop();
+        }
+        var firstLoop = true;
+
+        for (var i=0; i<=allActivePlayers.length-2; i++){
+            if (firstLoop){
+                team2.push(allActivePlayers[i]);
+                allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+                firstLoop = false;
+            } else {
+                if (!flipSide){
+                    team1.push(allActivePlayers[i]);
+                    allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+                    if (allActivePlayers[i+1]){
+                        team1.push(allActivePlayers[i+1]);
+                        allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+                    }
+                    flipSide = true;
+                } else {
+                    team2.push(allActivePlayers[i]);
+                    allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+                    if (allActivePlayers[i+1]){
+                        team2.push(allActivePlayers[i+1]);
+                        allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+                    }
+                }
+            }
+        }
+
+        if (randomLastPlayer){
+            var randomNum = Math.floor((Math.random() * 10) + 1);
+            if (isOdd(randomNum)){
+                team1.push(randomLastPlayer);
+            }
+            else{
+                team2.push(randomLastPlayer);
+            }
+        }
+
+        //     // In case random number unbalances teams
             while(team1.length - team2.length > 1){
                 team2.push(team1.pop());
             }
             while(team2.length - team1.length > 1){
                 team1.push(team2.pop());
             }
-        }
-
-        // -----------------------------------------------------------------------------------------
-
-        // Dave's
-        // var flipSide = false;
-        // var randomLastPlayer = null;
-        // if (isOdd(allActivePlayers.length)){
-        //     randomLastPlayer = allActivePlayers.pop();
-        // }
-
-        // for (var i=0; i<=allActivePlayers.length-2; i++){
-        //     if (i === 0){
-        //         team2.push(allActivePlayers[i]);
-        //     } else {
-        //         if (!flipSide){
-        //             team1.push(allActivePlayers[i]);
-        //             if (allActivePlayers[i+1]){
-        //                 team1.push(allActivePlayers[i+1]);
-        //             }
-        //             flipSide = true;
-        //         } else {
-        //             team2.push(allActivePlayers[i]);
-        //             if (allActivePlayers[i+1]){
-        //                 team2.push(allActivePlayers[i+1]);
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (randomLastPlayer){
-        //     var randomNum = Math.floor((Math.random() * 10) + 1);
-        //     if (isOdd(randomNum)){
-        //         team1.push(randomLastPlayer);
-        //     }
-        //     else{
-        //         team2.push(randomLastPlayer);
-        //     }
-        // }
         // -----------------------------------------------------------------------------------------
 
 
