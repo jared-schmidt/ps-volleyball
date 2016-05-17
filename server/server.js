@@ -565,36 +565,67 @@ Meteor.methods({
 
         // Dave's
         var flipSide = false;
+        var team1Turn = true;
         var randomLastPlayer = null;
         if (isOdd(allActivePlayers.length)){
             randomLastPlayer = allActivePlayers.pop();
         }
         var firstLoop = true;
 
-        for (var i=0; i<=allActivePlayers.length-2; i++){
-            if (firstLoop){
-                team2.push(allActivePlayers[i]);
-                allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
-                firstLoop = false;
-            } else {
-                if (!flipSide){
-                    team1.push(allActivePlayers[i]);
-                    allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
-                    if (allActivePlayers[i+1]){
-                        team1.push(allActivePlayers[i+1]);
-                        allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
-                    }
-                    flipSide = true;
-                } else {
-                    team2.push(allActivePlayers[i]);
-                    allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
-                    if (allActivePlayers[i+1]){
-                        team2.push(allActivePlayers[i+1]);
-                        allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
-                    }
+        //Pop off the current top which would be player 3 onto team 2
+        team2.push(allActivePlayers.shift());
+
+        //loop through the remainders now give 2 to each team
+        while(allActivePlayers.length > 0)
+        {
+            if(team1Turn)
+            {
+                team1.push(allActivePlayers.shift());
+
+                //if not empty yet give them another
+                if(allActivePlayers.length != 0)
+                {
+                    team1.push(allActivePlayers.shift());
                 }
+                team1Turn = false;
+            }
+            else
+            {
+                team2.push(allActivePlayers.shift());
+
+                //if not empty yet give them another
+                if(allActivePlayers.length != 0)
+                {
+                    team2.push(allActivePlayers.pop());
+                }
+                team1Turn = true;
             }
         }
+
+        // for (var i=0; i<=allActivePlayers.length-2; i++){
+        //     if (firstLoop){
+        //         team2.push(allActivePlayers[i].pop());
+        //         //allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+        //         firstLoop = false;
+        //     } else {
+        //         if (!flipSide){
+        //             team1.push(allActivePlayers[i].pop());
+        //             //allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+        //             if (allActivePlayers[i+1]){
+        //                 team1.push(allActivePlayers[i+1].pop());
+        //                 //allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+        //             }
+        //             flipSide = true;
+        //         } else {
+        //             team2.push(allActivePlayers[i].pop());
+        //             allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+        //             if (allActivePlayers[i+1]){
+        //                 team2.push(allActivePlayers[i+1]);
+        //                 allActivePlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {'_id': allActivePlayers[i]._id}));
+        //             }
+        //         }
+        //     }
+        // }
 
         if (randomLastPlayer){
             var randomNum = Math.floor((Math.random() * 10) + 1);
