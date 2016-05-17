@@ -121,7 +121,7 @@ Template.hello.helpers({
             'profile.retired': false
         }, {
             sort: {
-                'profile.name': -1
+                'profile.name': 1
             }
         }).fetch();
     },
@@ -130,7 +130,7 @@ Template.hello.helpers({
             'profile.retired': true
         }, {
             sort: {
-                'profile.name': -1,
+                'profile.name': 1,
             }
         }).fetch();
     },

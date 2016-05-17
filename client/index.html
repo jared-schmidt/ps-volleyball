@@ -71,8 +71,21 @@
                     <span class="lever"></span> Active
                 </label>
             </div>
+            <button class="btn btn-primary" onclick="toggleWeather();" style="margin-top: 10px;">View Weather</button>
         </div>
     </div>
+    <div class="row" style="display:none;" id="weatherDiv">
+        <a href="http://www.accuweather.com/en/us/johnstown-pa/15904/current-weather/6405_pc" class="aw-widget-legal">
+        <!--
+        By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at http://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at http://www.accuweather.com/en/privacy.
+        -->
+        </a><div id="awtd1463523327622" class="aw-widget-36hour"  data-locationkey="6405_PC" data-unit="f" data-language="en-us" data-useip="false" data-uid="awtd1463523327622" data-editlocation="true"></div><script type="text/javascript" src="http://oap.accuweather.com/launch.js"></script>
+    </div>
+    <script type="text/javascript">
+        function toggleWeather() {
+            $("#weatherDiv").toggle();
+        }
+    </script>
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a class="btn-floating btn-large red">
             <i class="fa fa-folder"></i>
