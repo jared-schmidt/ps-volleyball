@@ -29,3 +29,7 @@ td, th {
 #makeAway {
   color: white;
 }
+
+body {
+  cursor: url('/volleyball.gif'), auto;
+}
