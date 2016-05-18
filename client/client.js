@@ -230,6 +230,23 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
+    'click #WeatherBtn' : function(e){
+        $('.modal-trigger').leanModal({
+            dismissible: true,
+            ready: function() {
+                if($(".lean-overlay").length > 1) {
+                    $(".lean-overlay:not(:first)").each(function() {
+                        $(this).remove();
+                    });
+                }
+            },
+             complete: function() {
+                $(".lean-overlay").each(function() {
+                    $(this).remove();
+                });
+            }
+        });
+    },
     'click #getPastData': function(e){
         alert('LOOK IN JAVASCRIPT CONSOLE');
         console.log(Meteor.users.find({}, {fields: {'profile.past': 1, 'profile.name': 1}}).fetch());
