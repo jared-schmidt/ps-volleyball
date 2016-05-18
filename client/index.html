@@ -7,13 +7,6 @@
     <!-- Meta tags that set up the page as a mobile page   -->
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet" />
-    <script>
-    $.fn.poshytip = {
-        defaults: null
-    }
-
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 </head>
 
 <body>
@@ -35,6 +28,13 @@
         {{/if}}
     </div>
     {{> meteorStatus}}
+
+    <script>
+        $.fn.poshytip = {
+            defaults: null
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 </body>
 <template name="hello">
 
@@ -83,7 +83,7 @@
                     <span class="lever"></span> Active
                 </label>
                 <a style="margin-left: 20px;" class="waves-effect waves-light btn modal-trigger" id="WeatherBtn" href="#weatherModal">View Weather</a>
-            </div>  
+            </div>
         </div>
     </div>
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
