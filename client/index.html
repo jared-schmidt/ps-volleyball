@@ -51,7 +51,7 @@
             <a href="#!" id='createTeamsOptimized' class=" modal-action modal-close waves-effect waves-green btn-flat">optimized</a>
         </div>
     </div>
-    <div id="endSeasonModal" class="modal modal-fixed-footer">
+    <div id="endSeasonModal" class="modal">
         <div class="modal-content">
             <h3>THIS CAN NOT BE UNDONE!</h3>
             <h4>This will end the season</h4>
@@ -59,6 +59,15 @@
         </div>
         <div class="modal-footer">
             <a href="#!" id='endSeason' class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
+    <div id="winningWay" class="modal">
+        <div class="modal-content">
+            <h4>How did the team win</h4>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" data-tie='true' class=" modal-action modal-close waves-effect waves-green btn-flat winningWay">Tie-Breaker</a>
+            <a href="#!" data-tie='false' class=" modal-action modal-close waves-effect waves-green btn-flat winningWay">No Tie-Breaker</a>
         </div>
     </div>
     <div id="weatherModal" class="modal">
@@ -306,7 +315,12 @@
                                         <td>
                                             {{dateFormat}}
                                         </td>
-                                        <td>{{side}}</td>
+                                        <td>
+                                            {{side}}
+                                            {{#if isTie}}
+                                                (Tie Breaker)
+                                            {{/if}}
+                                        </td>
                                         <td>
                                             <ul>
                                                 {{#each winningTeam.team}}
@@ -340,13 +354,18 @@
                     <span class="card-title">Retired Players</span>
                     <table class="responsive-table">
                         <thead>
+                            {{#if isAdmin}}
+                                <th></th>
+                            {{/if}}
                             <th>Name</th>
                             <th>Title</th>
                         </thead>
                         <tbody>
                             {{#each retiredPlayers}}
                                 <tr>
-                                    <td><a href='#' id='unretire'>unretire</a></td>
+                                    {{#if isAdmin}}
+                                        <td><a href='#' id='unretire'>unretire</a></td>
+                                    {{/if}}
                                     <td>{{profile.name}}</td>
                                     <td>
                                         {{profile.title}}
