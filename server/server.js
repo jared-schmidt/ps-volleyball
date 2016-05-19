@@ -251,6 +251,17 @@ Meteor.methods({
         });
         return true;
     },
+    unretire: function(userId){
+        Meteor.users.update({
+            '_id': userId
+        }, {
+            $set: {
+                'profile.retired': false,
+                'profile.active': false
+            }
+        });
+        return true;
+    },
     clearTeam1: function(){
         Team1.remove({});
         return true;
