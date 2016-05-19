@@ -96,7 +96,9 @@ Meteor.methods({
             var playerCount = [];
 
             var winPoints = 3;
-            var losePoints = 1;
+            var winPointsBreaker = 2;
+            var losePointsBreaker = 1;
+            var losePoints = 0;
 
             _.each(pastGames, function(game) {
                 var win = game.winningTeam.team;
@@ -112,8 +114,16 @@ Meteor.methods({
                         found.winningStreak += 1;
                         found.losingStreak = 0;
                         // found.playingStreak += 1;
-                        found.points += winPoints;
+                        if (game.isTie){
+                            found.points += winPointsBreaker;
+                        } else {
+                            found.points += winPoints;
+                        }
                     } else {
+                        var p = winPoints;
+                        if (game.isTie){
+                            p = winPointsBreaker;
+                        }
                         playerCount.push({
                             _id: player._id,
                             name: player.profile.name,
@@ -123,7 +133,7 @@ Meteor.methods({
                             losingStreak: 0,
                             playingStreak: 0,
                             total: 1,
-                            points: winPoints
+                            points: p
                         });
                     }
                 });
@@ -137,8 +147,16 @@ Meteor.methods({
                         found.lost += 1;
                         found.winningStreak = 0;
                         found.losingStreak += 1;
-                        found.points += losePoints;
+                        if (game.isTie){
+                            found.points += losePointsBreaker;
+                        } else {
+                            found.points += losePoints;
+                        }
                     } else {
+                        var p = losePoints;
+                        if (game.isTie){
+                            p = losePointsBreaker;
+                        }
                         playerCount.push({
                             _id: player._id,
                             name: player.profile.name,
@@ -148,7 +166,7 @@ Meteor.methods({
                             losingStreak: 1,
                             playingStreak: 0,
                             total: 1,
-                            points: losePoints
+                            points: p
                         });
                     }
                 });
@@ -182,9 +200,6 @@ Meteor.methods({
                 });
 
             });
-
-
-
 
             _.each(playerCount, function(player) {
                 var stats = {
@@ -676,7 +691,6 @@ Meteor.methods({
             team2Percentage += parseFloat(player.profile.winPercentage);
             team2Points += parseInt(player.profile.points);
         });
-        console.log(team2Points);
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
         if (team1.length > 0 && team2.length > 0) {
             if (isAdmin()) {
@@ -724,7 +738,7 @@ Meteor.methods({
 
 
     },
-    markTeam1Win: function() {
+    markTeam1Win: function(isTie) {
         if (isAdmin()) {
             var team = Team1.findOne({});
             if (team && team.team.length > 0) {
@@ -742,7 +756,8 @@ Meteor.methods({
                     winningTeam: Team1.findOne({}),
                     losingTeam: Team2.findOne({}),
                     when: new Date(),
-                    side: 'Home'
+                    side: 'Home',
+                    isTie: isTie
                 });
 
                 Team1.remove({});
@@ -751,7 +766,7 @@ Meteor.methods({
             Meteor.call('fixTotalGamesPlayer');
         }
     },
-    markTeam2Win: function() {
+    markTeam2Win: function(isTie) {
         if (isAdmin()) {
             var team = Team2.findOne({});
             if (team && team.team.length > 0) {
@@ -769,7 +784,8 @@ Meteor.methods({
                     winningTeam: Team2.findOne({}),
                     losingTeam: Team1.findOne({}),
                     when: new Date(),
-                    side: 'Away'
+                    side: 'Away',
+                    isTie: isTie
                 });
 
                 Team1.remove({});
@@ -780,7 +796,6 @@ Meteor.methods({
     },
     endSeason: function(){
         if (isSuperAdmin()) {
-            console.log("END");
             PastSeasons.insert({
                 'pastTeams': PastTeams.find({}).fetch(),
                 'records': {
@@ -1069,7 +1084,6 @@ Meteor.methods({
             if (player.profile.total < 8){
                 constant = 5;
             }
-            console.log(player.profile.name + ' = ' + constant);
             var elo = (wins + constant * avgWin) / (wins + loses + constant);
             if (elo){
                 Meteor.users.update({

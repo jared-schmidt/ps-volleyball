@@ -445,7 +445,7 @@ Template.hello.events({
     'click #team1Win': function(e) {
         e.preventDefault();
         $('#winningWay').openModal();
-
+        Session.set('winner', 1);
         // Meteor.call('markTeam1Win');
         // Materialize.toast('Home Team Won!', 4000);
         // clippyAgent.speak('Good job Home team!... Away team, you suck!');
@@ -453,7 +453,7 @@ Template.hello.events({
     'click #team2Win': function(e) {
         e.preventDefault();
         $('#winningWay').openModal();
-
+        Session.set('winner', 2);
         // Meteor.call('markTeam2Win');
         // Materialize.toast('Away Team Won!', 4000);
         // clippyAgent.speak('Good job Away team!... Home team, you suck!');
@@ -475,6 +475,17 @@ Template.hello.events({
     },
     'click .winningWay': function(e){
         e.preventDefault();
+        var winningTeam = Session.get('winner');
+        var isTie = $(e.currentTarget).attr("data-tie");
+        if (winningTeam === 1) {
+            Meteor.call('markTeam1Win', isTie, function(){
+                Materialize.toast('Home Team Won!', 4000);
+            });
+        } else if (winningTeam === 2) {
+            Meteor.call('markTeam2Win', isTie, function(){
+                Materialize.toast('Away Team Won!', 4000);
+            });
+        }
     }
 
 });
