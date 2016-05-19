@@ -843,7 +843,9 @@ Meteor.methods({
         var playerCount = [];
 
         var winPoints = 3;
-        var losePoints = 1;
+        var winPointsBreaker = 2;
+        var losePointsBreaker = 1;
+        var losePoints = 0;
 
         _.each(pastGames, function(game) {
             var win = game.winningTeam.team;
@@ -859,8 +861,16 @@ Meteor.methods({
                     found.winningStreak += 1;
                     found.losingStreak = 0;
                     // found.playingStreak += 1;
-                    found.points += winPoints;
+                    if (game.isTie){
+                        found.points += winPointsBreaker;
+                    } else {
+                        found.points += winPoints;
+                    }
                 } else {
+                    var p = winPoints;
+                    if (game.isTie){
+                        p = winPointsBreaker;
+                    }
                     playerCount.push({
                         _id: player._id,
                         name: player.profile.name,
@@ -870,7 +880,7 @@ Meteor.methods({
                         losingStreak: 0,
                         playingStreak: 0,
                         total: 1,
-                        points: winPoints
+                        points: p
                     });
                 }
             });
@@ -884,8 +894,16 @@ Meteor.methods({
                     found.lost += 1;
                     found.winningStreak = 0;
                     found.losingStreak += 1;
-                    found.points += losePoints;
+                    if (game.isTie){
+                        found.points += losePointsBreaker;
+                    } else {
+                        found.points += losePoints;
+                    }
                 } else {
+                    var p = losePoints;
+                    if (game.isTie){
+                        p = losePointsBreaker;
+                    }
                     playerCount.push({
                         _id: player._id,
                         name: player.profile.name,
@@ -895,7 +913,7 @@ Meteor.methods({
                         losingStreak: 1,
                         playingStreak: 0,
                         total: 1,
-                        points: losePoints
+                        points: p
                     });
                 }
             });
