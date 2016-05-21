@@ -4,36 +4,6 @@ Meteor.startup(function() {
 
 
 Template.hello.helpers({
-    
-    onSuccess: function() {
-        var id = this._id;
-        return function(res, val) {
-            Meteor.call('changeUserTitle', val, id, function(err, data) {
-                if (err) {
-                    console.error(err);
-                    Materialize.toast('Error!', 4000);
-                }
-                Materialize.toast('Changed title', 4000);
-            });
-        }
-    },
-
-    activePlayers: function(){
-        return Meteor.users.find({
-            'profile.retired': false,
-            'profile.active': true
-        }).count();
-    },
-    players: function() {
-        return Meteor.users.find({
-            'profile.retired': false
-        }, {
-            sort: {
-                'profile.name': 1
-            }
-        }).fetch();
-    },
-
     team1: function() {
         var team = Team1.find({}).fetch();
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
@@ -76,9 +46,7 @@ Template.hello.helpers({
             };
         }
     },
-    booleanToString: function(v) {
-        return v ? 'Yes' : 'No';
-    },
+
     isActive: function() {
         return Meteor.user().profile.active;
     },
@@ -88,89 +56,10 @@ Template.hello.helpers({
 
 
 
-
-
-
-
-
-
 Template.hello.events({
     'click #WeatherBtn' : function(e){
         $('#weatherModal').openModal();
     },
-    'click #pastData': function(e){
-        Meteor.call('getPastTeamData', function(err, status){
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            } else {
-                if (status) {
-                    Materialize.toast('Fixed Past!', 4000);
-                }
-            }
-        });
-    },
-    'click #makeHome': function(e) {
-        e.preventDefault();
-        Meteor.call('addToHome', this._id, function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            }
-
-            if (status) {
-                Materialize.toast('Added to Home!', 4000);
-            } else {
-                Materialize.toast('Did nothing...', 4000);
-            }
-        });
-    },
-    'click #makeAway': function(e) {
-        e.preventDefault();
-        Meteor.call('addToAway', this._id, function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            }
-
-            if (status) {
-                Materialize.toast('Added to Home!', 4000);
-            } else {
-                Materialize.toast('Did nothing...', 4000);
-            }
-        });
-    },
-    'click #retire': function(e) {
-        e.preventDefault();
-        Meteor.call('retire', this._id, function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            }
-
-            if (status) {
-                Materialize.toast('Retired!', 4000);
-            } else {
-                Materialize.toast('Did nothing...', 4000);
-            }
-        });
-    },
-    'click #unretire': function(e){
-        e.preventDefault();
-        Meteor.call('unretire', this._id, function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            }
-
-            if (status) {
-                Materialize.toast('OUT OF RETIREMENT!', 4000);
-            } else {
-                Materialize.toast('Did nothing...', 4000);
-            }
-        });
-    },
-
     'click #endSeason': function(e) {
         e.preventDefault();
         Meteor.call('endSeason', function(err, status) {
@@ -237,21 +126,7 @@ Template.hello.events({
             Materialize.toast('Need to be an admin', 4000);
         }
     },
-    'click #fix': function(e) {
-        e.preventDefault();
-        Materialize.toast('Trying to fix!', 2000);
-        Meteor.call('fixTotalGamesPlayer', function(err, data) {
-            if (err) {
-                Materialize.toast('Error fixing', 4000);
-                console.error(err);
-            } else {
-                Materialize.toast('Should be fixed!', 4000);
-            }
-        });
-    },
-    'click #pastTeamsBtn': function(e) {
-        e.preventDefault();
-    },
+
     'click .winningWay': function(e){
         e.preventDefault();
         var winningTeam = Session.get('winner');

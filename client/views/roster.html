@@ -1,0 +1,60 @@
+<template name='roster'>
+	<div class="row">
+	    <div class="col s12 m12">
+	        <div class="card blue-grey darken-1">
+	            <div class="card-content white-text">
+	                <span class="card-title">Roster (Active: {{activePlayers}})</span>
+	                <table class="responsive-table">
+	                    <thead>
+	                        <th></th>
+	                        {{#if isAdmin}}
+	                            <th>Retire</th>
+	                            <th>Add to teadm</th>
+	                        {{/if}}
+	                        <th>Name</th>
+	                        <th>Title</th>
+	                        <th>Active</th>
+	                    </thead>
+	                    <tbody>
+	                        {{#each players}}
+	                            <tr>
+	                                <td><img height="32" width="32" src="{{services.google.picture}}" /></td>
+	                                {{#if isAdmin}}
+	                                    <td><a href='#' id='retire'>Retire</a>{{profile.retired}}</td>
+	                                    <td><a href='#' id='makeHome'>Home</a> | <a id='makeAway' href='#'>Away</a></td>
+	                                {{/if}}
+	                                <td>{{profile.name}}</td>
+	                                <td>
+	                                    {{#if isAdmin}}
+	                                        {{> xEditable type="text" success=onSuccess placement="right" value=profile.title mode='inline'}}
+	                                    {{else}}
+	                                        {{profile.title}}
+	                                    {{/if}}
+	                                </td>
+	                                <td>
+	                                    {{#if isAdmin}}
+	                                        <div class="switch">
+	                                            <label>
+	                                                <input type="checkbox" class="user-active-toggle" checked= {{profile.active}} />
+	                                                <span class="lever"></span>
+	                                            </label>
+	                                        </div>
+	                                    {{else}}
+	                                        {{booleanToString(profile.active)}}
+	                                    {{/if}}
+	                                </td>
+	                            </tr>
+	                        {{/each}}
+	                    </tbody>
+	                </table>
+	            </div>
+	            {{#if isSuperAdmin}}
+	                <div class="card-action">
+	                    <a id='fix' href="#">Update Stats</a>
+	                    <a id='pastData' href="#">Past Data</a>
+	                </div>
+	            {{/if}}
+	        </div>
+	    </div>
+	</div>
+</template>
