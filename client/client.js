@@ -142,29 +142,6 @@ Template.hello.helpers({
                 'profile.name': -1
             }
         }).fetch();
-    },
-
-    records: function() {
-        var currectPlaying = PlayingStreak.find({}, {
-            sort: {
-                'score': -1
-            }
-        }).fetch()[0];
-        var currectWinning = WinningStreak.find({}, {
-            sort: {
-                'score': -1
-            }
-        }).fetch()[0];
-        var currectLosing = LosingStreak.find({}, {
-            sort: {
-                'score': -1
-            }
-        }).fetch()[0];
-        return {
-            playing: currectPlaying,
-            winning: currectWinning,
-            losing: currectLosing
-        };
     }
 });
 
