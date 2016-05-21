@@ -37,38 +37,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 </body>
 
-<!-- {{> team team-id="2" team=team2 team-header="Away (Road)" }} -->
-<template name='team'>
-    <div class="col s12 m6">
-        <div class="card blue-grey darken-1">
-            <div class="card-content white-text" id='team{{teamId}}'>
-                <span class="card-title">
-                    
-                    {{teamHeader}}
-                     
-                    {{#if team.team}}&mdash; {{team.teamPercentage}} - {{team.points}}{{/if}} - {{#if team.random }}Random Team{{else}}Custom Team{{/if}}
-                </span>
-                <ul style='list-style-type: decimal'>
-                    {{#each team.team}}
-                        <li>
-                            {{this.profile.name}}
-                            {{#if isAdmin}}
-                                <i teamId='{{../teamId}}' class="fa fa-times removePlayer"></i>
-                            {{/if}}
-                        </li>
-                    {{/each}}
-                </ul>
-            </div>
-            {{#if isAdmin}}
-                <div class="card-action">
-                    <a id='team{{teamId}}Win' href="#">Won</a>
-                    <a id='team{{teamId}}Clear' href="#">Clear</a>
-                    <a id='team{{teamId}}Copy' class="btn-copy" data-clipboard-target="#team{{teamId}}" href="#">Copy</a>
-                </div>
-            {{/if}}
-        </div>
-    </div>
-</template>
+
 
 <template name="hello">
 
