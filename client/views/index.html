@@ -36,6 +36,33 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
 </body>
+
+<!-- {{> team team-id="2" team=team2 }} -->
+<template name='team'>
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text" id='team'>
+                <span class="card-title">Away (Road) {{#if team.team}}&mdash; {{team.teamPercentage}} - {{team.points}}{{/if}} - {{#if team.random }}Random Team{{else}}Custom Team{{/if}}</span>
+                <ul style='list-style-type: decimal'>
+                    {{#each team.team}}
+                        <li>
+                            {{this.profile.name}}
+                            {{#if isAdmin}}<i id='removePlayer' team-id='2' class="fa fa-times"></i>{{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{#if isAdmin}}
+                <div class="card-action">
+                    <a id='team2Win' href="#">Won</a>
+                    <a id='team2Clear' href="#">Clear</a>
+                    <a id='team2Copy' class="btn-copy" data-clipboard-target="#team" href="#">Copy</a>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</template>
+
 <template name="hello">
 
     <!-- Modal Structure -->
@@ -117,58 +144,19 @@
             </li>
         </ul>
     </div>
+    
+    <!-- Teams -->
     <div class="row">
         <!-- Away Team -->
         {{#if team2.team}}
-            <div class="col s12 m6">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text" id='team2'>
-                        <span class="card-title">Away (Road) {{#if team2.team}}&mdash; {{team2.teamPercentage}} - {{team2.points}}{{/if}} - {{#if team2.random }}Random Team{{else}}Custom Team{{/if}}</span>
-                        <ul style='list-style-type: decimal'>
-                            {{#each team2.team}}
-                                <li>
-                                    {{this.profile.name}}
-                                    {{#if isAdmin}}<i id='removePlayer' team-id='2' class="fa fa-times"></i>{{/if}}
-                                </li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                    {{#if isAdmin}}
-                        <div class="card-action">
-                            <a id='team2Win' href="#">Won</a>
-                            <a id='team2Clear' href="#">Clear</a>
-                            <a id='team2Copy' class="btn-copy" data-clipboard-target="#team2" href="#">Copy</a>
-                        </div>
-                    {{/if}}
-                </div>
-            </div>
+            {{> team team-id="2" team=team2 }}
         {{/if}}
         <!-- Home Team -->
         {{#if team1.team}}
-            <div class="col s12 m6">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text" id='team1'>
-                        <span class="card-title">Home (Parking Lot) {{#if team1.team}}&mdash; {{team1.teamPercentage}} - {{team1.points}}{{/if}} - {{#if team1.random }}Random Team{{else}}Custom Team{{/if}}</span>
-                        <ul style='list-style-type: decimal'>
-                            {{#each team1.team}}
-                                <li>
-                                    {{this.profile.name}}
-                                    {{#if isAdmin}}<i id='removePlayer' team-id='1' class="fa fa-times"></i>{{/if}}
-                                </li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                    {{#if isAdmin}}
-                        <div class="card-action">
-                            <a id='team1Win' href="#">Won</a>
-                            <a id='team1Clear' href="#">Clear</a>
-                            <a id='team1Copy' class="btn-copy" data-clipboard-target="#team1" href="#">Copy</a>
-                        </div>
-                    {{/if}}
-                </div>
-            </div>
+            {{> team team-id="1" team=team1 }}
         {{/if}}
     </div>
+
     <!-- Roster -->
     {{#unless isCordova}}
         <div class="row">
