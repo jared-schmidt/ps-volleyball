@@ -2,46 +2,8 @@ Meteor.startup(function() {
     Meteor.subscribe('userData');
 });
 
-Session.setDefault('team1', []);
-Session.setDefault('team2', []);
-Session.setDefault('stats', []);
-Session.setDefault('pastTeams', []);
-Session.setDefault('records', {});
-// var clippyAgent;
-
-Template.hello.rendered = function(){
-    var clipboard = new Clipboard('.btn-copy');
-    clipboard.on('success', function(e) {
-        // console.info('Action:', e.action);
-        // console.info('Text:', e.text);
-        // console.info('Trigger:', e.trigger);
-        Materialize.toast('Copied to clipboard!', 4000);
-        // clippyAgent.speak('You copy that ' + Meteor.user().profile.given_name + '! Go You!');
-
-        e.clearSelection();
-    });
-
-    clipboard.on('error', function(e) {
-        // console.error('Action:', e.action);
-        // console.error('Trigger:', e.trigger);
-        Materialize.toast('Error coping!', 4000);
-    });
-
-    // clippy.load('Clippy', function(agent){
-    //     // do anything with the loaded agent
-        // clippyAgent = agent;
-    //     agent.show();
-    //     agent.moveTo(100,100);
-    //     agent.speak('Hey ' + Meteor.user().profile.given_name + '!');
-    //     agent.animate();
-    // });
-}
 
 Template.hello.helpers({
-    isCordova: function(){
-        // return Meteor.isCordova;
-        return false;
-    },
     settings: function() {
         return {
             rowsPerPage: 15,
@@ -179,12 +141,6 @@ Template.hello.helpers({
     booleanToString: function(v) {
         return v ? 'Yes' : 'No';
     },
-    isAdmin: function() {
-        return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
-    },
-    isSuperAdmin: function() {
-        return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
-    },
     isActive: function() {
         return Meteor.user().profile.active;
     },
@@ -229,24 +185,18 @@ Template.hello.helpers({
     }
 });
 
+
+
+
+
+
+
+
+
+
 Template.hello.events({
     'click #WeatherBtn' : function(e){
         $('#weatherModal').openModal();
-        // $('.modal-trigger').leanModal({
-        //     dismissible: true,
-        //     ready: function() {
-        //         if($(".lean-overlay").length > 1) {
-        //             $(".lean-overlay:not(:first)").each(function() {
-        //                 $(this).remove();
-        //             });
-        //         }
-        //     },
-        //      complete: function() {
-        //         $(".lean-overlay").each(function() {
-        //             $(this).remove();
-        //         });
-        //     }
-        // });
     },
     'click #getPastData': function(e){
         alert('LOOK IN JAVASCRIPT CONSOLE');
@@ -261,34 +211,6 @@ Template.hello.events({
             } else {
                 if (status) {
                     Materialize.toast('Fixed Past!', 4000);
-                }
-            }
-        });
-    },
-    'click #team1Clear': function(e) {
-        Meteor.call('clearTeam1', function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            } else {
-                if (status) {
-                    Materialize.toast('Clear Home Team!', 4000);
-                } else {
-                    Materialize.toast('Did nothing...', 4000);
-                }
-            }
-        });
-    },
-    'click #team2Clear': function(e) {
-        Meteor.call('clearTeam2', function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-                console.error(err);
-            } else {
-                if (status) {
-                    Materialize.toast('Clear Away Team!', 4000);
-                } else {
-                    Materialize.toast('Did nothing...', 4000);
                 }
             }
         });
@@ -353,23 +275,7 @@ Template.hello.events({
             }
         });
     },
-    'click #removePlayer': function(e) {
-        e.preventDefault();
-        var teamId = $(e.currentTarget).attr("team-id");
-        Meteor.call('removePlayer', {
-            'id': this._id,
-            'teamId': teamId
-        }, function(err, status) {
-            if (err) {
-                Materialize.toast('Error!', 4000);
-            }
-            if (status) {
-                Materialize.toast('Player Removed!', 4000);
-            } else {
-                Materialize.toast('Shit if I number...', 4000);
-            }
-        });
-    },
+
     'click #endSeason': function(e) {
         e.preventDefault();
         Meteor.call('endSeason', function(err, status) {
@@ -387,7 +293,6 @@ Template.hello.events({
     },
     'click #highest': function(e) {
         e.preventDefault();
-
     },
     'change #activeSelect': function(e) {
         e.preventDefault();
@@ -399,11 +304,6 @@ Template.hello.events({
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeUserStatus', newValue, this._id);
     },
-    // 'change .input-field' : function(e){
-    //     e.preventDefault();
-    //     var newValue = $(e.target).val();
-    //     Meteor.call('changeUserTitle', newValue, this._id);
-    // },
     'click #teamsModal': function(e) {
         e.preventDefault();
         $('#modal1').openModal();
@@ -441,22 +341,6 @@ Template.hello.events({
         } else {
             Materialize.toast('Need to be an admin', 4000);
         }
-    },
-    'click #team1Win': function(e) {
-        e.preventDefault();
-        $('#winningWay').openModal();
-        Session.set('winner', 1);
-        // Meteor.call('markTeam1Win');
-        // Materialize.toast('Home Team Won!', 4000);
-        // clippyAgent.speak('Good job Home team!... Away team, you suck!');
-    },
-    'click #team2Win': function(e) {
-        e.preventDefault();
-        $('#winningWay').openModal();
-        Session.set('winner', 2);
-        // Meteor.call('markTeam2Win');
-        // Materialize.toast('Away Team Won!', 4000);
-        // clippyAgent.speak('Good job Away team!... Home team, you suck!');
     },
     'click #fix': function(e) {
         e.preventDefault();

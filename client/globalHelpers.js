@@ -1,0 +1,11 @@
+Template.registerHelper( 'isAdmin', () => {
+	return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
+});
+
+Template.registerHelper( 'isSuperAdmin', () => {
+	return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
+});
+
+Template.registerHelper('equals', function (a, b) {
+    return a === b;
+});
