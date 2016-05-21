@@ -1,0 +1,48 @@
+<template name='pastTeams'>
+	<!-- <div class="row"> -->
+	    <div class="col s12 m6" id='pastTeams'>
+	        <div class="card blue-grey darken-1">
+	            <div class="card-content white-text">
+	                <span class="card-title">Past Teams ({{pastTeams.length}})</span>
+	                <table class="responsive-table">
+	                    <thead>
+	                        <th>Date</th>
+	                        <th>Side</th>
+	                        <th>Winning Team</th>
+	                        <th>Losing Team</th>
+	                    </thead>
+	                    <tbody>
+	                        {{#each pastTeams}}
+	                            <tr>
+	                                <td>
+	                                    {{dateFormat}}
+	                                </td>
+	                                <td>
+	                                    {{side}}
+	                                    {{#if isTie}}
+	                                        (Tie Breaker)
+	                                    {{/if}}
+	                                </td>
+	                                <td>
+	                                    <ul>
+	                                        {{#each winningTeam.team}}
+	                                            <li>{{profile.name}}</li>
+	                                        {{/each}}
+	                                    </ul>
+	                                </td>
+	                                <td>
+	                                    <ul>
+	                                        {{#each losingTeam.team}}
+	                                            <li>{{profile.name}}</li>
+	                                        {{/each}}
+	                                    </ul>
+	                                </td>
+	                            </tr>
+	                        {{/each}}
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+	    </div>
+	<!-- </div> -->
+</template>
