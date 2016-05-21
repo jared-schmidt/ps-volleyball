@@ -1,5 +1,17 @@
 /* CSS declarations go here */
 
+body {
+  cursor: url('/volleyball.gif'), auto;
+}
+
+#navHeader {
+  padding: 0 20px;
+}
+
+#content {
+  width: 88%; 
+  margin: 0 auto;
+}
 
 td, th {
     text-align: center;
@@ -30,6 +42,3 @@ td, th {
   color: white;
 }
 
-body {
-  cursor: url('/volleyball.gif'), auto;
-}

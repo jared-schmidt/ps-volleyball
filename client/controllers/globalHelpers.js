@@ -13,3 +13,7 @@ Template.registerHelper('equals', function (a, b) {
 Template.registerHelper('dateFormat', function () {
 	return moment(this.when).format('LL');
 });
+
+Template.registerHelper('isActive', function () {
+	return Meteor.user().profile.active;
+});

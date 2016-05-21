@@ -67,6 +67,11 @@ Template.roster.events({
 	            Materialize.toast('Did nothing...', 4000);
 	        }
 	    });
+	},
+	'change .user-active-toggle': function(e) {
+	    e.preventDefault();
+	    var newValue = $(e.target).is(":checked");
+	    Meteor.call('changeUserStatus', newValue, this._id);
 	}
 });
 

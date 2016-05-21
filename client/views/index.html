@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <nav style='padding: 0 20px;'>
+
+    <nav id='navHeader'>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo">PS-VolleyBall</a>
             <ul id="nav-mobile" class="right">
@@ -18,7 +19,8 @@
             </ul>
         </div>
     </nav>
-    <div style='width: 88%; margin: 0 auto;'>
+    
+    <div id='content'>
         {{#if currentUser}}
             {{> hello}}
         {{else}}
@@ -27,6 +29,7 @@
             </div>
         {{/if}}
     </div>
+
     {{> meteorStatus}}
 
     <script>
@@ -40,30 +43,8 @@
 
 
 <template name="hello">
-
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <h4>Create New Teams</h4>
-            <p>
-                This will create new team, and overwrite any currectly existing teams.
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" id='createTeams' class=" modal-action modal-close waves-effect waves-green btn-flat">Random</a>
-            <a href="#!" id='createTeamsOptimized' class=" modal-action modal-close waves-effect waves-green btn-flat">optimized</a>
-        </div>
-    </div>
-    <div id="endSeasonModal" class="modal">
-        <div class="modal-content">
-            <h3>THIS CAN NOT BE UNDONE!</h3>
-            <h4>This will end the season</h4>
-            <p>This will clear all past teams, records and current player stats</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" id='endSeason' class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
-    </div>
+    
+    <!-- Winning Modal -->
     <div id="winningWay" class="modal">
         <div class="modal-content">
             <h4>How did the team win</h4>
@@ -73,6 +54,8 @@
             <a href="#!" data-tie='false' class=" modal-action modal-close waves-effect waves-green btn-flat winningWay">No Tie-Breaker</a>
         </div>
     </div>
+
+    <!-- Weather Modal -->
     <div id="weatherModal" class="modal">
         <div class="modal-content">
             <a href="http://www.accuweather.com/en/us/johnstown-pa/15904/current-weather/6405_pc" class="aw-widget-legal">
@@ -85,6 +68,8 @@
 
         </div>
     </div>
+
+    <!-- User Active Change -->
     <div class="row">
         <div class="col s12 m6">
             <label>YOUR STATUS:</label>
@@ -98,28 +83,9 @@
             </div>
         </div>
     </div>
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red">
-            <i class="fa fa-folder"></i>
-        </a>
-        <ul>
-            <li>
-                <a href='#' id='byeClippy' class="btn-floating red darken-1"><i class="fa fa-lemon-o"></i></a>
-            </li>
-            <li>
-                <a href='#' id='endSeasonModalBtn' class="btn-floating red darken-1"><i class="fa fa-trash-o"></i></a>
-            </li>
-            <li>
-                <a target='_blank' href='https://github.com/jared-schmidt/ps-volleyball' class="btn-floating yellow darken-1"><i class="fa fa-github"></i></a>
-            </li>
-            <li>
-                <a target='_blank' href='https://docs.google.com/document/d/1D_S-2xNvmcWxbq5dUv8JpWEPPLynKI3GTYT8Ije5mS0/edit' class="btn-floating green"><i class="fa fa-book"></i></a>
-            </li>
-            <li>
-                <a href='#' id='teamsModal' class="btn-floating blue"><i class="fa fa-plus"></i></a>
-            </li>
-        </ul>
-    </div>
+
+    <!-- Floating Button -->
+    {{> floatingButton}}
     
     <!-- Teams -->
     <div class="row">

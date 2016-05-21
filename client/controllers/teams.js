@@ -1,21 +1,11 @@
 Template.team.rendered = function(){
-    var clipboard = new Clipboard('.btn-copy');
-    clipboard.on('success', function(e) {
-        Materialize.toast('Copied to clipboard!', 4000);
-        e.clearSelection();
-    });
 
-    clipboard.on('error', function(e) {
-        Materialize.toast('Error coping!', 4000);
-    });
 }
 
 Template.team.events({
     'click .removePlayer': function(e) {
         e.preventDefault();
         var teamId = $(e.currentTarget).attr("teamId");
-        console.log(teamId);
-        console.log(this);
         Meteor.call('removePlayer', {
             'id': this._id,
             'teamId': teamId
