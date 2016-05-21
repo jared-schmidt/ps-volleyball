@@ -1,0 +1,14 @@
+<template name='stats'>
+	<div class="row" id='stats'>
+	    <div class="col s12 m12">
+	        <div class="card blue-grey darken-1">
+	            <div class="card-content white-text">
+	                <span class="card-title">Stats</span> {{> reactiveTable collection=stats settings=settings}}
+	            </div>
+	            <div class="card-action">
+	                <a id='getPastData' href="#">Past Data</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</template>
