@@ -87,15 +87,7 @@ Template.hello.helpers({
             }
         }).fetch();
     },
-    retiredPlayers: function() {
-        return Meteor.users.find({
-            'profile.retired': true
-        }, {
-            sort: {
-                'profile.name': 1,
-            }
-        }).fetch();
-    },
+
     team1: function() {
         var team = Team1.find({}).fetch();
         if (team.length === 1 && team[0].hasOwnProperty('team')) {
@@ -360,7 +352,7 @@ Template.hello.events({
     'click .winningWay': function(e){
         e.preventDefault();
         var winningTeam = Session.get('winner');
-        var isTie = $(e.currentTarget).attr("data-tie");
+        var isTie = $(e.currentTarget).attr("data-tie").toLowerCase() === 'true';
         if (winningTeam === 1) {
             Meteor.call('markTeam1Win', isTie, function(){
                 Materialize.toast('Home Team Won!', 4000);
