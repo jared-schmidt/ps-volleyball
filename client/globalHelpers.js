@@ -9,3 +9,7 @@ Template.registerHelper( 'isSuperAdmin', () => {
 Template.registerHelper('equals', function (a, b) {
     return a === b;
 });
+
+Template.registerHelper('dateFormat', function () {
+	return moment(this.when).format('LL');
+});

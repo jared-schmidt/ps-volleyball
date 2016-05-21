@@ -69,9 +69,7 @@ Template.hello.helpers({
             });
         }
     },
-    dateFormat: function() {
-        return moment(this.when).format('LL');
-    },
+
     activePlayers: function(){
         return Meteor.users.find({
             'profile.retired': false,
@@ -145,14 +143,7 @@ Template.hello.helpers({
             }
         }).fetch();
     },
-    pastTeams: function() {
-        var pastGames = PastTeams.find({}, {
-            sort: {
-                'when': 1
-            }
-        }).fetch();
-        return pastGames;
-    },
+
     records: function() {
         var currectPlaying = PlayingStreak.find({}, {
             sort: {
