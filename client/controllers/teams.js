@@ -1,4 +1,4 @@
-Template.team.rendered = function(){
+Template.team.rendered = function() {
 
 }
 

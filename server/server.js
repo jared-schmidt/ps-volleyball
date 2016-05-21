@@ -1,29 +1,20 @@
-
-
-function isOdd(num) {
+isOdd = function(num) {
     return num % 2;
 }
 
-function elo(w, l, avg, c){return (w + c * avg)/(w + l + c)}
+elo = function(w, l, avg, c) {
+    return (w + c * avg) / (w + l + c)
+}
 
-Meteor.publish('userData', function() {
-    if (!this.userId) return null;
-    return Meteor.users.find(this.userId, {
-        fields: {
-            wins: 1,
-        }
-    });
-});
-
-function isAdmin() {
+isAdmin = function() {
     return Roles.userIsInRole(Meteor.userId(), ['super-admin', 'admin'], 'default-group');
 }
 
-function isSuperAdmin(){
+isSuperAdmin = function() {
     return Roles.userIsInRole(Meteor.userId(), ['super-admin'], 'default-group');
 }
 
-function multiplemax(arr, compare) {
+multiplemax = function(arr, compare) {
     var max = _.max(arr, function(v) {
         return v[compare];
     });
@@ -32,18 +23,18 @@ function multiplemax(arr, compare) {
     });
 }
 
-function playerExists(team, playerId) {
-  var status = false;
-  _.each(team, function(player) {
-    if (player._id == playerId) {
-      status = true;
-    }
-  });
-  return status;
+playerExists = function(team, playerId) {
+    var status = false;
+    _.each(team, function(player) {
+        if (player._id == playerId) {
+            status = true;
+        }
+    });
+    return status;
 }
 
 Meteor.methods({
-    log: function(did){
+    log: function(did) {
         Logs.insert({
             'user': Meteor.user()._id,
             'did': did,

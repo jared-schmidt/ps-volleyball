@@ -55,12 +55,12 @@ Template.hello.helpers({
                 'random': null
             };
         }
-    }    
+    }
 });
 
 
 Template.hello.events({
-    'click #WeatherBtn' : function(e){
+    'click #WeatherBtn': function(e) {
         $('#weatherModal').openModal();
     },
     'change #activeSelect': function(e) {
@@ -68,16 +68,16 @@ Template.hello.events({
         var newValue = $(e.target).is(":checked");
         Meteor.call('changeStatus', newValue);
     },
-    'click .winningWay': function(e){
+    'click .winningWay': function(e) {
         e.preventDefault();
         var winningTeam = Session.get('winner');
         var isTie = $(e.currentTarget).attr("data-tie").toLowerCase() === 'true';
         if (winningTeam === 1) {
-            Meteor.call('markTeam1Win', isTie, function(){
+            Meteor.call('markTeam1Win', isTie, function() {
                 Materialize.toast('Home Team Won!', 4000);
             });
         } else if (winningTeam === 2) {
-            Meteor.call('markTeam2Win', isTie, function(){
+            Meteor.call('markTeam2Win', isTie, function() {
                 Materialize.toast('Away Team Won!', 4000);
             });
         }
