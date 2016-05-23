@@ -278,6 +278,9 @@ Meteor.methods({
 
         // Rookies (players who played less then 3 games)
         var team1Turn = true;
+        if (Math.random() >= 0.5) {
+            team1Turn = false;
+        }
         // mix up array
         rookies = _.shuffle(rookies);
         // go through and randomly place
