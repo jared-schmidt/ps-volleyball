@@ -130,9 +130,32 @@ Meteor.methods({
         var team1 = [];
         var team2 = [];
 
+        // /////////////////////////////////////////////////////////////////////////////////////////
+        // Part of Dave's
+
+        // Rookies (players who played less then 3 games)
+        var rookies = [];
+        var remainingPlayers = [];
+
+        _.each(allActivePlayers, function(player, index) {
+            if (player && player.profile.total <= 3) {
+                rookies.push(player);
+                remainingPlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {
+                    '_id': player._id
+                }));
+            }
+        });
+
+        allActivePlayers = remainingPlayers;
+        // /////////////////////////////////////////////////////////////////////////////////////////
+
+
         // Put best and worst player on the same team
-        team1.push(allActivePlayers.shift());
-        team1.push(allActivePlayers.pop());
+        var bestPlayer = allActivePlayers.shift();
+        var worstPlayer = allActivePlayers.pop();
+        // console.log("Best -> ", bestPlayer);
+        team1.push(bestPlayer);
+        team1.push(worstPlayer);
 
         // If more than 2 players remaining, put second best and second worst on same team
         // If there is only one player left it will skip this and put them on team 2
@@ -181,6 +204,7 @@ Meteor.methods({
         var flipSide = false;
         var team1Turn = true;
         var randomLastPlayer = null;
+
         if (isOdd(allActivePlayers.length)) {
             randomLastPlayer = allActivePlayers.pop();
         }
@@ -192,6 +216,7 @@ Meteor.methods({
         //loop through the remainders now give 2 to each team
         while (allActivePlayers.length > 0)
         {
+
             if (team1Turn)
             {
                 team1.push(allActivePlayers.shift());
@@ -251,7 +276,27 @@ Meteor.methods({
             }
         }
 
-        //     // In case random number unbalances teams
+        // Rookies (players who played less then 3 games)
+        var team1Turn = true;
+        if (Math.random() >= 0.5) {
+            team1Turn = false;
+        }
+        // mix up array
+        rookies = _.shuffle(rookies);
+        // go through and randomly place
+        while (rookies.length > 0){
+        	var player = rookies.shift();
+        	if (team1Turn) {
+        	    team1.push(player);
+        	    team1Turn = false;
+        	} else {
+        	    team2.push(player);
+        	    team1Turn = true;
+        	}
+        }
+
+
+        // In case random number unbalances teams
         while (team1.length - team2.length > 1) {
             team2.push(team1.pop());
         }
