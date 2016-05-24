@@ -135,7 +135,7 @@ Meteor.methods({
 
         // Rookies (players who played less then 3 games)
         var rookies = [];
-        var remainingPlayers = [];
+        var remainingPlayers = allActivePlayers;
 
         _.each(allActivePlayers, function(player, index) {
             if (player && player.profile.total <= 3) {
@@ -146,7 +146,6 @@ Meteor.methods({
             }
         });
 
-        allActivePlayers = remainingPlayers;
         // /////////////////////////////////////////////////////////////////////////////////////////
 
 
