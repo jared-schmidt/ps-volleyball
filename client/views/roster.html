@@ -8,11 +8,11 @@
 	                    <thead>
 	                        <!-- <th></th> -->
 	                        {{#if isAdmin}}
-	                            <th>Retire</th>
-	                            <th>Add to teadm</th>
+	                            <th class="hide-on-med-and-down">Retire</th>
+	                            <th>Add to team</th>
 	                        {{/if}}
 	                        <th>Name</th>
-	                        <th>Title</th>
+	                        <th class="hide-on-med-and-down">Title</th>
 	                        <th>Active</th>
 	                    </thead>
 	                    <tbody>
@@ -20,11 +20,11 @@
 	                            <tr>
 	                                <td><img height="32" width="32" src="{{services.google.picture}}" /></td>
 	                                {{#if isAdmin}}
-	                                    <td><a href='#' id='retire'>Retire</a>{{profile.retired}}</td>
+	                                    <td class="hide-on-med-and-down"><a href='#' id='retire'>Retire</a>{{profile.retired}}</td>
 	                                    <td><a href='#' id='makeHome'>Home</a> | <a id='makeAway' href='#'>Away</a></td>
 	                                {{/if}}
 	                                <td>{{profile.name}}</td>
-	                                <td>
+	                                <td class="hide-on-med-and-down">
 	                                    {{#if isAdmin}}
 	                                        {{> xEditable type="text" success=onSuccess placement="right" value=profile.title mode='inline'}}
 	                                    {{else}}
