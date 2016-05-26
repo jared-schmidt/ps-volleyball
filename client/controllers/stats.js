@@ -1,7 +1,20 @@
 Template.stats.events({
     'click #getPastData': function(e) {
         alert('LOOK IN JAVASCRIPT CONSOLE');
-        console.log(Meteor.users.find({}, { fields: { 'profile.past': 1, 'profile.name': 1 } }).fetch());
+        console.log(Meteor.users.find({}, {
+            fields: {
+                'profile.past': 1,
+                'profile.name': 1
+            }
+        }).fetch());
+    },
+    "change .is-active, input .is-active": function(e, template) {
+        var input = $(e.target).is(":checked");
+        if (input) {
+            template.filter.set('true');
+        } else {
+            template.filter.set('');
+        }
     }
 });
 
@@ -22,6 +35,8 @@ Template.stats.helpers({
             showNavigationRowsPerPage: false,
             showRowCount: false,
             showNavigation: 'auto',
+            useFontAwesome: true,
+            filters: ['is-active'],
             fields: [{
                 key: 'profile.name',
                 label: 'Name'
@@ -59,3 +74,7 @@ Template.stats.helpers({
         };
     }
 });
+
+Template.stats.created = function() {
+    this.filter = new ReactiveTable.Filter('is-active', ['profile.active']);
+};
