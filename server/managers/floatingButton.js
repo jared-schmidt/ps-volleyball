@@ -135,14 +135,15 @@ Meteor.methods({
 
         // Rookies (players who played less then 3 games)
         var rookies = [];
-        var remainingPlayers = allActivePlayers;
+        var remainingPlayers = [];
 
         _.each(allActivePlayers, function(player, index) {
             if (player && player.profile.total <= 3) {
                 rookies.push(player);
-                remainingPlayers = _.without(allActivePlayers, _.findWhere(allActivePlayers, {
-                    '_id': player._id
-                }));
+            } else {
+                if (player){
+                    remainingPlayers.push(player);
+                }
             }
         });
 
@@ -151,12 +152,14 @@ Meteor.methods({
         // /////////////////////////////////////////////////////////////////////////////////////////
 
 
-        // Put best and worst player on the same team
-        var bestPlayer = allActivePlayers.shift();
-        var worstPlayer = allActivePlayers.pop();
-        // console.log("Best -> ", bestPlayer);
-        team1.push(bestPlayer);
-        team1.push(worstPlayer);
+        if (allActivePlayers.length > 1) {
+            // Put best and worst player on the same team
+            var bestPlayer = allActivePlayers.shift();
+            var worstPlayer = allActivePlayers.pop();
+            // console.log("Best -> ", bestPlayer);
+            team1.push(bestPlayer);
+            team1.push(worstPlayer);
+        }
 
         // If more than 2 players remaining, put second best and second worst on same team
         // If there is only one player left it will skip this and put them on team 2
@@ -212,7 +215,9 @@ Meteor.methods({
         var firstLoop = true;
 
         //Pop off the current top which would be player 3 onto team 2
-        team2.push(allActivePlayers.shift());
+        if (allActivePlayers > 0) {
+            team2.push(allActivePlayers.shift());
+        }
 
         //loop through the remainders now give 2 to each team
         while (allActivePlayers.length > 0)
@@ -305,6 +310,7 @@ Meteor.methods({
             team1.push(team2.pop());
         }
         // -----------------------------------------------------------------------------------------
+        // console.log(team1);
 
 
         var count = 0;
@@ -313,17 +319,23 @@ Meteor.methods({
         var team2Percentage = 0.0;
         var team2Points = 0;
         _.each(team1, function(player) {
-            count += 1;
-            team1Percentage += parseFloat(player.profile.winPercentage);
-            team1Points += parseInt(player.profile.points);
+            // console.log(player);
+            // if (player){
+                count += 1;
+                team1Percentage += parseFloat(player.profile.winPercentage);
+                team1Points += parseInt(player.profile.points);
+            // }
         });
         team1Percentage = parseFloat(team1Percentage) / parseInt(count);
 
         count = 0;
         _.each(team2, function(player) {
-            count += 1;
-            team2Percentage += parseFloat(player.profile.winPercentage);
-            team2Points += parseInt(player.profile.points);
+            // console.log(player);
+            // if (player){
+                count += 1;
+                team2Percentage += parseFloat(player.profile.winPercentage);
+                team2Points += parseInt(player.profile.points);
+            // }
         });
         team2Percentage = parseFloat(team2Percentage) / parseInt(count);
         if (team1.length > 0 && team2.length > 0) {
