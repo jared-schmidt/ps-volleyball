@@ -6,7 +6,7 @@
 	                <span class="card-title">Roster (Active: {{activePlayers}})</span>
 	                <table class="responsive-table">
 	                    <thead>
-	                        <!-- <th></th> -->
+	                        <th></th>
 	                        {{#if isAdmin}}
 	                            <th class="hide-on-med-and-down">Retire</th>
 	                            <th>Add to team</th>
@@ -23,7 +23,7 @@
 	                                    <td class="hide-on-med-and-down"><a href='#' id='retire'>Retire</a>{{profile.retired}}</td>
 	                                    <td><a href='#' id='makeHome'>Home</a> | <a id='makeAway' href='#'>Away</a></td>
 	                                {{/if}}
-	                                <td>{{profile.name}}</td>
+	                                <td class='showCareer'>{{profile.name}}</td>
 	                                <td class="hide-on-med-and-down">
 	                                    {{#if isAdmin}}
 	                                        {{> xEditable type="text" success=onSuccess placement="right" value=profile.title mode='inline'}}
@@ -51,7 +51,6 @@
 	            {{#if isSuperAdmin}}
 	                <div class="card-action">
 	                    <a id='fix' href="#">Update Stats</a>
-	                    <a id='pastData' href="#">Past Data</a>
 	                </div>
 	            {{/if}}
 	        </div>

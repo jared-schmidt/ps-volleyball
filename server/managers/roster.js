@@ -1,4 +1,9 @@
 Meteor.methods({
+    fixAll: function(){
+        Meteor.call('getPastTeamData', function(){
+            Meteor.call('fixTotalGamesPlayer');
+        });
+    },
     fixTotalGamesPlayer: function() {
         var allPlayers = Meteor.users.find().fetch();
 
@@ -229,6 +234,12 @@ Meteor.methods({
                     'profile.loses': player.lost,
                     'profile.winPercentage': player.winPercentage,
                     'profile.points': player.points
+                },
+                $inc: {
+                    'career.wins': player.win,
+                    'career.loses': player.lost,
+                    'career.points': player.points,
+                    'career.total': player.total
                 }
             });
         });
@@ -246,12 +257,16 @@ Meteor.methods({
                         'profile.winPercentage': 0.0,
                         'profile.points': 0,
                         'profile.elo': 0.0
-
+                    },
+                    $inc: {
+                        'career.wins': 0,
+                        'career.loses': 0,
+                        'career.points': 0,
+                        'career.total': 0
                     }
                 });
             });
         }
-
 
         var allPlayersWhoPlayed = Meteor.users.find({ 'profile.total': { $gt: 0 } }).fetch();
         var winTotal = 0.0;
@@ -291,7 +306,7 @@ Meteor.methods({
         };
     },
     getPastTeamData: function() {
-        Meteor.users.update({}, { $unset: { 'profile.past': [] } }, { multi: true });
+        Meteor.users.update({}, { $unset: { 'profile.past': [], 'career': {} } }, { multi: true });
         var seasons = PastSeasons.find().fetch();
         _.each(seasons, function(season, index) {
 
@@ -422,7 +437,13 @@ Meteor.methods({
                 Meteor.users.update({
                     '_id': player._id,
                 }, {
-                    $addToSet: { 'profile.past': stats }
+                    $addToSet: { 'profile.past': stats },
+                    $inc: {
+                        'career.wins': player.win,
+                        'career.loses': player.lost,
+                        'career.points': player.points,
+                        'career.total': player.total
+                    }
                 });
             });
 

@@ -1,8 +1,33 @@
 Template.roster.events({
+    'click .showCareer': function(e) {
+        e.preventDefault();
+        var career = '<table>';
+        career += '<thead>'
+        career += '<tr>';
+        career += '<th>Points</th>';
+        career += '<th>Wins</th>';
+        career += '<th>Loses</th>';
+        career += '<th>Total</th>';
+        career += '<th>Win%</th>';
+        career += '</tr>';
+        career += '</thead>';
+        career += '<tbody>';
+        career += '<tr>';
+        career += '<td> ' + this.career.points + ' </td>';
+        career += '<td> ' + this.career.wins + ' </td>';
+        career += '<td> ' + this.career.loses + ' </td>';
+        career += '<td> ' + this.career.total + ' </td>';
+        career += '<td> ' + (this.career.wins/this.career.total).toFixed(2) + ' </td>';
+        career += '</tr>';
+        career += '</tbody>';
+        career += '</table>';
+
+        Materialize.toast(career, 4000);
+    },
     'click #fix': function(e) {
         e.preventDefault();
         Materialize.toast('Trying to fix!', 2000);
-        Meteor.call('fixTotalGamesPlayer', function(err, data) {
+        Meteor.call('fixAll', function(err, data) {
             if (err) {
                 Materialize.toast('Error fixing', 4000);
                 console.error(err);
