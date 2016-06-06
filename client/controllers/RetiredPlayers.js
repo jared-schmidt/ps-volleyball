@@ -25,5 +25,8 @@ Template.retiredPlayers.helpers({
                 'profile.name': 1,
             }
         }).fetch();
+    },
+    winPercentage: function(){
+        return (this.career.wins/this.career.total).toFixed(2)
     }
 });

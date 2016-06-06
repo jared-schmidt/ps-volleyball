@@ -12,6 +12,9 @@
 		                        {{/if}}
 		                        <th>Name</th>
 		                        <th>Title</th>
+		                        <th>Wins</th>
+		                        <th>Total</th>
+		                        <th>Win%</th>
 		                    </thead>
 		                    <tbody>
 		                        {{#each retiredPlayers}}
@@ -23,6 +26,9 @@
 		                                <td>
 		                                    {{profile.title}}
 		                                </td>
+		                                <td>{{career.wins}}</td>
+		                                <td>{{career.total}}</td>
+		                                <th>{{winPercentage}}</th>
 		                            </tr>
 		                        {{/each}}
 		                    </tbody>
