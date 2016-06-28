@@ -213,10 +213,10 @@ Meteor.methods({
             randomLastPlayer = allActivePlayers.pop();
         }
         var firstLoop = true;
-
         //Pop off the current top which would be player 3 onto team 2
-        if (allActivePlayers > 0) {
-            team2.push(allActivePlayers.shift());
+        if (allActivePlayers.length > 0) {
+            var p3 = allActivePlayers.shift();
+            team2.push(p3);
         }
 
         //loop through the remainders now give 2 to each team
@@ -330,7 +330,6 @@ Meteor.methods({
 
         count = 0;
         _.each(team2, function(player) {
-            // console.log(player);
             // if (player){
                 count += 1;
                 team2Percentage += parseFloat(player.profile.winPercentage);
