@@ -11,15 +11,15 @@
 
 <body>
 
-    <nav id='navHeader'>
-        <div class="nav-wrapper">
+    <nav id='navHeader' class="lime">
+        <div class="nav-wrapper lime">
             <a href="#" class="brand-logo">PS-VolleyBall</a>
             <ul id="nav-mobile" class="right">
                 <li>{{> loginButtons}}</li>
             </ul>
         </div>
     </nav>
-    
+
     <div id='content'>
         {{#if currentUser}}
             {{> hello}}
@@ -43,7 +43,7 @@
 
 
 <template name="hello">
-    
+
     <!-- Winning Modal -->
     <div id="winningWay" class="modal">
         <div class="modal-content">
@@ -79,14 +79,14 @@
                     <input type="checkbox" id='activeSelect' checked= {{isActive}}>
                     <span class="lever"></span> Active
                 </label>
-                <a style="margin-left: 20px;" class="waves-effect waves-light btn modal-trigger" id="WeatherBtn" href="#weatherModal">View Weather</a>
+                <a style="margin-left: 20px;" class="waves-effect waves-light btn modal-trigger green accent-3" id="WeatherBtn" href="#weatherModal">View Weather</a>
             </div>
         </div>
     </div>
 
     <!-- Floating Button -->
     {{> floatingButton}}
-    
+
     <!-- Teams -->
     <div class="row">
         <!-- Away Team -->
@@ -117,4 +117,3 @@
 
     </div>
 </template>
-
